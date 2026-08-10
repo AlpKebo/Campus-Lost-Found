@@ -118,7 +118,7 @@ export default async function BrowsePage({ searchParams }: PageProps) {
       ) : (
         <>
           <p className="mb-4 text-sm text-neutral-500 dark:text-neutral-400">
-            {items.length} ilan
+            {items.length} {items.length === 1 ? "listing" : "listings"}
           </p>
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {items.map((item) => (
