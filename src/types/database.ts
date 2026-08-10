@@ -122,6 +122,15 @@ export type Database = {
         Args: { p_item_id: string };
         Returns: boolean;
       };
+      /**
+       * student1 branch'inde eklenir: supabase/student1_accept_claim.sql
+       * Claim'i kabul eder, item'ı claimed yapar, diğer pending claim'leri
+       * reddeder — hepsi tek transaction'da.
+       */
+      accept_claim: {
+        Args: { p_claim_id: string };
+        Returns: undefined;
+      };
     };
     Enums: {
       item_type: ItemType;
