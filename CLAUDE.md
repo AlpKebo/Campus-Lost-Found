@@ -1,1 +1,3 @@
 @AGENTS.md
+@README.md
+@STUDENT2_NOTES.md
