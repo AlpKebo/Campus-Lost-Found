@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ItemStatusBadge, TypeBadge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Feedback";
 import { CATEGORY_LABELS } from "@/lib/constants";
+import { formatItemDate } from "@/lib/student2-format";
 import type { Item } from "@/types/database";
 
 /**
@@ -11,18 +12,6 @@ import type { Item } from "@/types/database";
  *
  * SAHİBİ: student2 (Discover & Claim).
  */
-
-/** "2026-08-10" → "10 Ağu 2026". Tarayıcı diline bağlı kalmasın diye sabit. */
-const MONTHS = [
-  "Oca", "Şub", "Mar", "Nis", "May", "Haz",
-  "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara",
-];
-
-function formatItemDate(value: string): string {
-  const [year, month, day] = value.split("-").map(Number);
-  if (!year || !month || !day) return value;
-  return `${day} ${MONTHS[month - 1]} ${year}`;
-}
 
 export function ItemCard({ item }: { item: Item }) {
   return (
