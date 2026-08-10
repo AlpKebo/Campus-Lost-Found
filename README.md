@@ -150,3 +150,49 @@ git push origin student1
 
 Merge zamanı geldiğinde Group Project Cheat Sheet'i takip et.
 Final birleşmiş `main` Vercel'e deploy edilir.
+
+**Durum:** PR #3 (student1) ve PR #1 (student2) çapraz review sonrası merge
+edildi. `main` iki tarafın işini de içeriyor.
+
+---
+
+## Deploy
+
+Canlı sürüm: **https://campus-lost-found-sand.vercel.app**
+
+Vercel projesi `main` branch'ine bağlı. Şu an **Deployment Protection açık** —
+adres yalnızca proje sahibinin Vercel hesabıyla açılıyor. Sunum/teslim için
+herkese açmak gerekirse Vercel → Project Settings → Deployment Protection'dan
+kapatılır.
+
+### Vercel'de tanımlı ortam değişkenleri
+
+| Değişken | Değer |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase proje URL'i |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon / public anahtar |
+
+`NEXT_PUBLIC_SITE_URL` **bilerek tanımlı değil**. Kod bu değişken yoksa
+`window.location.origin`'e düşüyor (`src/app/login/page.tsx`), böylece magic
+link hangi adresten giriliyorsa oraya dönüyor — preview deploy'larda da doğru
+çalışıyor.
+
+> **Windows uyarısı:** Değişkenleri PowerShell'den `... | vercel env add` ile
+> eklemeyin. PowerShell native komuta pipe ederken değerin başına görünmez bir
+> UTF-8 BOM ekliyor; build sorunsuz geçiyor ama uygulama çalışırken
+> `ByteString ... value of 65279` hatası veriyor. Git Bash'ten
+> `printf '%s' "$DEGER" | vercel env add ...` kullanın.
+
+### Supabase Auth ayarı — atlanmamalı
+
+`Authentication → URL Configuration → Redirect URLs` listesine şunlar ekli
+olmalı, yoksa magic link girişi doğru adrese dönmez:
+
+```
+http://localhost:3000/auth/callback
+https://campus-lost-found-sand.vercel.app/auth/callback
+https://campus-lost-found-*-alp18.vercel.app/auth/callback
+```
+
+Site URL şu an `http://localhost:3000`. Canlı sürüm herkese açıldığında
+production adresiyle değiştirilmeli.
