@@ -34,9 +34,9 @@ yaşarsın.
    Sonda üç satır ve `rls_enabled = t` görüyorsan kurulum tamamdır.
 3. **Authentication → Sign In / Providers → Email**: “Confirm email” açık,
    şifreyle giriş kapalı olsun (Magic Link için).
-4. **Authentication → URL Configuration**:
-   - Site URL: `http://localhost:3000`
-   - Redirect URLs: `http://localhost:3000/auth/callback`
+4. **Authentication → URL Configuration** — aşağıdaki "Supabase Auth ayarı"
+   bölümüne bak. Redirect URL'leri `/**` ile bitmeli, yoksa magic link
+   yanlış adrese düşer.
 
 `schema.sql` şunları kurar: `profiles` / `items` / `claims` tabloları, enum'lar,
 index'ler, yeni kullanıcı trigger'ı, tüm RLS policy'leri, `item-images` storage
@@ -185,14 +185,26 @@ link hangi adresten giriliyorsa oraya dönüyor — preview deploy'larda da doğ
 
 ### Supabase Auth ayarı — atlanmamalı
 
-`Authentication → URL Configuration → Redirect URLs` listesine şunlar ekli
-olmalı, yoksa magic link girişi doğru adrese dönmez:
+`Authentication → URL Configuration`:
 
 ```
-http://localhost:3000/auth/callback
-https://campus-lost-found-sand.vercel.app/auth/callback
-https://campus-lost-found-*-alp18.vercel.app/auth/callback
+Site URL:
+  https://campus-lost-found-sand.vercel.app
+
+Redirect URLs:
+  http://localhost:3000/**
+  https://campus-lost-found-sand.vercel.app/**
+  https://campus-lost-found-*-alp18.vercel.app/**
 ```
 
-Site URL şu an `http://localhost:3000`. Canlı sürüm herkese açıldığında
-production adresiyle değiştirilmeli.
+**Sondaki `/**` zorunlu.** Uygulama callback adresine query string ekliyor
+(`/auth/callback?next=%2Fbrowse`, bkz. `src/app/login/page.tsx`). Listeye
+query'siz `.../auth/callback` yazılırsa Supabase eşleşmeyi bulamaz ve
+**Site URL'e geri düşer**.
+
+**Neden Site URL localhost olmamalı:** İki öğrenci aynı Supabase projesini
+paylaşıyor ama Site URL tek. `http://localhost:3000` yazarsa magic link
+"3000 portu" der ve linke tıklayanın kendi makinesindeki 3000'e gider — o
+portta hangi proje çalışıyorsa ona. Bu bir kez gerçekten yaşandı: bir
+tarafın 3000'inde başka bir uygulama çalıştığı için giriş oraya düştü.
+Site URL canlı adres olduğu sürece bu olamaz.
