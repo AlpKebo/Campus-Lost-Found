@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { ClaimStatusBadge, ItemStatusBadge, TypeBadge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
@@ -14,6 +15,7 @@ import { formatItemDate } from "@/lib/student2-format";
 import type { Claim, Item } from "@/types/database";
 
 import { ClaimForm } from "./ClaimForm";
+import { RelatedItems, RelatedItemsSkeleton } from "./RelatedItems";
 
 /**
  * Item Detail — tek bir ilanın tüm ayrıntısı ve claim gönderme paneli.
@@ -160,6 +162,11 @@ export default async function ItemDetailPage({ params }: PageProps) {
           </div>
         </div>
       </div>
+
+      {/* Ayrı sorgu; Suspense sayesinde detayın gelmesini bekletmiyor. */}
+      <Suspense fallback={<RelatedItemsSkeleton />}>
+        <RelatedItems item={item} />
+      </Suspense>
     </div>
   );
 }

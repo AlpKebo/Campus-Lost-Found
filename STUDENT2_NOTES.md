@@ -21,16 +21,26 @@ Proje kurallarının tamamı için `README.md`'ye bak.
 | `src/app/browse/BrowseFilters.tsx` | Arama + tür/kategori/sıralama, GET form |
 | `src/app/browse/ItemCard.tsx` | Liste kartı |
 | `src/app/browse/filters.ts` | Querystring okuma ve doğrulama |
+| `src/app/browse/loading.tsx` | Filtre + ızgara iskeleti |
+| `src/app/browse/error.tsx` | Hata sınırı |
 | `src/app/items/[id]/page.tsx` | İlan detayı + claim paneli |
 | `src/app/items/[id]/ClaimForm.tsx` | Claim formu (client) |
 | `src/app/items/[id]/actions.ts` | Claim server action'ı |
 | `src/app/items/[id]/claim-contract.ts` | Claim sabitleri ve durum tipi |
+| `src/app/items/[id]/RelatedItems.tsx` | Benzer ilanlar (karşıt tür, aynı kategori) |
+| `src/app/items/[id]/loading.tsx` | Detay iskeleti |
+| `src/app/items/[id]/error.tsx` | Hata sınırı |
+| `src/app/items/[id]/not-found.tsx` | İlan bulunamadı sayfası |
 | `src/app/sent-claims/page.tsx` | Gönderilen claim'ler |
+| `src/app/sent-claims/loading.tsx` | Liste iskeleti |
+| `src/app/sent-claims/error.tsx` | Hata sınırı |
 | `src/lib/student2-format.ts` | Tarih biçimlendirme |
+| `src/components/student2-Skeleton.tsx` | İskelet parçaları |
+| `src/components/student2-RouteError.tsx` | Ortak hata ekranı (client) |
 | `supabase/student2_seed_dev.sql` | Geliştirme için örnek ilanlar |
 
-Ortak `src/lib` altındaki dosya bilerek `student2-` ile başlıyor: aynı isimde
-iki dosya açılırsa merge conflict çıkar.
+Ortak `src/lib` ve `src/components` altındaki dosyalar bilerek `student2-` ile
+başlıyor: aynı isimde iki dosya açılırsa merge conflict çıkar.
 
 ## Yeni dosya açarken
 
@@ -54,20 +64,38 @@ Yeni bir yardımcı dosya gerekirse ya kendi route klasörüne koy, ya da adın�
   bunları temizliyor — arama koduna dokunursan aynısını koru.
 - **Tarih biçimlendirmede `Intl` kullanma.** Server ve client farklı çıktı
   verirse React hydration uyarısı basar.
+- **Next 16'da `error.tsx` prop'u `reset` değil `retry`.** `retry()` segmenti
+  veriyi yeniden çekerek render ediyor; `reset` yalnızca hata durumunu
+  temizliyordu. İnternetteki eski örnekler `reset` yazıyor, bu sürümde yanlış.
+- **`/items/[id]` klasörüne `loading.tsx` EKLEME.** `loading.tsx` sayfayı bir
+  Suspense sınırına sarıyor, yanıt akmaya başlıyor, HTTP başlıkları gidiyor ve
+  `notFound()` artık durum kodunu değiştiremiyor: 404 sessizce 200'e dönüyor.
+  Denendi ve geri alındı. Sayfanın yavaş kısmı olan benzer ilanlar zaten kendi
+  `<Suspense>` iskeletiyle akıyor. `/browse` ve `/sent-claims` `notFound()`
+  çağırmadığı için oralarda `loading.tsx` sorunsuz.
+- **Benzer ilanlar kategori eşleşmesine dayanıyor.** `RelatedItems` aynı
+  kategorideki KARŞIT tür ilanları getiriyor. Seed verisinde bir kategoride
+  yalnızca tek tür varsa bölüm hiç görünmez — özellik bozuk sanılır. Seed
+  dosyası bilerek çapraz çiftler içeriyor, o yapıyı koru.
 - **Windows:** PowerShell'de `&&` çalışmaz, komutları tek tek çalıştır.
 
 ## Doğrulama
 
-Değişiklikten sonra ikisi de temiz olmalı:
+Değişiklikten sonra üçü de temiz olmalı:
 
 ```
 npx tsc --noEmit
 npm run lint
+npm run build
 ```
+
+`build` ayrı bir adım olarak duruyor çünkü `tsc` ve `lint` yakalamadığı halde
+derlemede patlayan hatalar var (ör. `"use server"` export kuralı).
 
 `npm run dev` → http://localhost:3000
 
 Veritabanı boşken filtreleri test edemezsin; `supabase/student2_seed_dev.sql`
 dosyasındaki e-postayı kendininkiyle değiştirip Supabase SQL Editor'da
-çalıştır. Kendi ilanına claim atılamadığı için claim formunu denemek istersen
-ikinci bir e-postayla giriş yapman gerekir.
+çalıştır. Dosya tekrar çalıştırılabilir, aynı ilanı ikinci kez eklemiyor.
+Kendi ilanına claim atılamadığı için claim formunu denemek istersen ikinci bir
+e-postayla giriş yapman gerekir.
