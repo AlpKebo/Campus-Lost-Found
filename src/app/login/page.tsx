@@ -50,7 +50,7 @@ function LoginForm() {
   return (
     <div className="mx-auto max-w-md py-10">
       <Card className="p-6">
-        <h1 className="font-display text-xl font-bold text-ink">Log in</h1>
+        <h1 className="text-xl font-bold text-ink">Log in</h1>
         <p className="mt-1 text-sm text-ink-soft">
           Enter your email and we&apos;ll send you a sign-in link. No password
           needed.

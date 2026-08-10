@@ -44,8 +44,22 @@ export const CLAIM_STATUS_LABELS: Record<ClaimStatus, string> = {
   rejected: "Rejected",
 };
 
-/** Browse sayfasında görünen statüler. returned ve closed gizlidir. */
-export const BROWSABLE_STATUSES: ItemStatus[] = ["open", "claimed"];
+/**
+ * Browse sayfasında görünen statüler — yalnızca "open".
+ *
+ * "claimed" bilerek listede değil: bir ilan claim edildiği anda iş bitmiş
+ * sayılır, listede kalması hem aramayı kirletiyor hem de kullanıcıyı
+ * claim gönderemeyeceği bir ilana götürüyordu. Sahibi ilanını her statüde
+ * My Listings'te görmeye devam eder (items_select_public policy'si).
+ */
+export const BROWSABLE_STATUSES: ItemStatus[] = ["open"];
+
+/**
+ * Community Shelf — bir "found" ilan bu kadar gün boyunca claim almazsa
+ * ihtiyacı olanların başvurusuna açılır. Aynı sayı supabase/community_shelf.sql
+ * içindeki shelf_items view'ında da var; ikisi birlikte değişmeli.
+ */
+export const SHELF_DAYS = 30;
 
 /** Supabase Storage bucket adı. */
 export const ITEM_IMAGES_BUCKET = "item-images";
@@ -60,5 +74,6 @@ export const PROTECTED_ROUTES = [
   "/report",
   "/my-listings",
   "/sent-claims",
+  "/requests",
   "/profile-setup",
 ];

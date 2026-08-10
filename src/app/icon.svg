@@ -1,0 +1,31 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Campus Lost &amp; Found">
+  <!--
+    Marka işareti: bulunan eşyaya bağlanan kartonet etiket.
+    Gerçek hayatta kayıp eşya bürosunda teslim edilen her şeye böyle bir
+    etiket bağlanır — klasörden çok daha doğrudan bir "lost & found" nesnesi.
+
+    Delik ve ip bilerek kalın: 16px favicon boyutunda ince detay kayboluyor,
+    silüetin okunması için sadeleştirildi.
+  -->
+  <defs>
+    <linearGradient id="mark" x1="6" y1="4" x2="26" y2="29" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22d3ee" />
+      <stop offset="1" stop-color="#ec4899" />
+    </linearGradient>
+  </defs>
+
+  <g transform="rotate(-18 16 16)">
+    <!-- İp -->
+    <path
+      d="M16.4 9.5C16.4 5.4 13.4 3.2 10.2 4.4"
+      fill="none"
+      stroke="#c9bede"
+      stroke-width="2"
+      stroke-linecap="round"
+    />
+    <!-- Etiket gövdesi -->
+    <rect x="9.6" y="7.4" width="13.6" height="20.2" rx="3.4" fill="url(#mark)" />
+    <!-- Delik -->
+    <circle cx="16.4" cy="11.6" r="1.9" fill="#140e22" />
+  </g>
+</svg>

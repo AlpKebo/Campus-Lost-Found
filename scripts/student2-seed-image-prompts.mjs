@@ -8,10 +8,27 @@
  * `slug` hem dosya adı hem de public URL parçası: /seed-images/<slug>.jpg
  */
 
-/** Her prompt'un sonuna eklenen ortak stil — kartlar aynı dilde görünsün diye. */
+/**
+ * Her prompt'un sonuna eklenen ortak stil — kartlar aynı görsel dilde olsun diye.
+ *
+ * İlk sürüm ("realistic photo, soft daylight, plain neutral background") fazla
+ * kısaydı: model neyi keskinleştireceğini bilemediği için kartlar bulanık ve
+ * çizim gibi çıkıyordu. Burada üç şey açıkça söyleniyor —
+ *   1. NE tür bir görüntü: fotoğraf, illüstrasyon/render değil (son satırdaki
+ *      negatifler bunu bastırıyor)
+ *   2. NASIL çekilmiş: 50mm, açık diyafram, doğal pencere ışığı
+ *   3. NE kadar detay: keskin odak, malzeme dokusu, gerçek renk
+ *
+ * Not: prompt'ların kendisi ortamı söylüyor ("on a lecture hall desk"), o
+ * yüzden landing script'indeki gibi düz koyu fon ZORLANMIYOR — bunlar bir
+ * öğrencinin telefonla çektiği ilan fotoğrafı gibi durmalı.
+ */
 export const STYLE_SUFFIX =
-  "realistic photo, single object, soft daylight, plain neutral background, " +
-  "shallow depth of field, centered, no text, no watermark, no people";
+  "photorealistic photograph, sharp focus on the object, fine material texture, " +
+  "natural window light, soft realistic shadows, shallow depth of field with a " +
+  "gently blurred background, 50mm lens, high detail, true to life colour, " +
+  "no text, no logo, no branding, no watermark, no people, no hands, " +
+  "not an illustration, not a 3d render, not a cartoon";
 
 export const SEED_IMAGE_PROMPTS = [
   {

@@ -1,105 +1,132 @@
 @import "tailwindcss";
 
 /*
- * TEMA: "Graphite & Cyan"
+ * TEMA: "Aurora" — köşelerden gelen renkli elipslerin yumuşak geçişi.
  *
- * Zemin nötr grafit (#22252E) — bilinçli olarak ne açık ne siyah, ve
- * bilinçli olarak renksiz. Sebebi ilan fotoğrafları: renkli bir zemin
- * (mavi/yeşil/mor) fotoğraflara kendi rengini yansıtır, saf siyah ise
- * görselleri "kesik" gösterir. Nötr grafitte fotoğraflar kendi renkleriyle
- * görünür ve #F1F3F7 metin üzerinde ~13:1 kontrast verir.
+ * Arka plan tek bir gradient katmanı: dört köşeye yerleşen radyal elips ve
+ * altta dikey bir taban gradyanı. Blob + blur + grain yığını yerine düz
+ * geçiş kullanıyoruz — istenen "geçişli arka plan" bu.
  *
- * Vurgu elektrik siyan + magenta: renk enerjisinin tamamı zeminde değil,
- * küçük ve parlak alanlarda duruyor.
+ * Derinlik bilinçli olarak ORTA: taban #241B33 → #14101F. Sebebi iki tarafı
+ * da tutmak — (1) buzlu cam panellerin kenarındaki beyaz specular çizgi
+ * ancak arkası koyuyken görünür, (2) ürün fotoğrafları koyu fonla üretildiği
+ * için zemine yamalı durmadan oturuyor. Saf siyah değil, çünkü o zaman
+ * fotoğraflar "kesik" görünür.
  *
- * Tek renk modu, ve o mod koyu. Kod tabanında 160+ yerde
- * `text-neutral-900 dark:text-neutral-50` kalıbında sınıf çifti var.
- * Varyantı `prefers-color-scheme` yerine `.dark` sınıfına bağlayıp o sınıfı
- * <html> üzerine sabitliyoruz: böylece `dark:` tarafı HER ZAMAN kazanıyor,
- * sistem açık temadayken bile. Aksi halde koyu zeminde koyu metin çıkardı.
+ * OKUNABİLİRLİK: gövde metni #F7F5FB, ikincil metin #CFC6E0 — ikisi de bu
+ * taban üzerinde 7:1'in üzerinde kontrast veriyor. İkincil ton bilerek açık
+ * tutuldu; daha önceki paletlerde soluk kalıyordu.
+ *
+ * TEK RENK MODU: kod tabanında 160+ `text-neutral-900 dark:text-neutral-50`
+ * çifti var. `dark:` varyantını .dark sınıfına bağlayıp o sınıfı <html>
+ * üzerine sabitliyoruz; böylece koyu taraf her zaman kazanıyor.
  */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Yüzeyler — nötr grafit basamakları */
-  --color-canvas: #22252e; /* sayfa zemini */
-  --color-surface: #2b2f3a; /* kart / panel */
-  --color-surface-hi: #353a47; /* hover, ikincil panel */
+  /* Zemin ve yüzeyler */
+  --color-canvas: #1b1428;
+  --color-surface: #261d38;
+  --color-surface-hi: #322546;
 
   /* Çizgiler */
-  --color-line: #3d4250;
-  --color-line-strong: #565c6d;
+  --color-line: #3f3157;
+  --color-line-strong: #5b4a78;
 
   /* Metin */
-  --color-ink: #f1f3f7;
-  --color-ink-soft: #a9b0c0;
-  --color-ink-faint: #7b8294;
+  --color-ink: #f7f5fb;
+  --color-ink-soft: #cfc6e0;
+  --color-ink-faint: #a396bd;
 
   /* Vurgu */
-  --color-glow: #22d3ee; /* elektrik siyan — birincil */
+  --color-glow: #22d3ee;
   --color-glow-deep: #0e91a8;
-  --color-magenta: #f0349f; /* ikincil vurgu */
+  --color-magenta: #ec4899;
+  --color-violet: #a78bfa;
   --color-mint: #34d399;
   --color-alert: #fb7185;
+  --color-on-glow: #08141a;
 
-  /* Siyan zemin üstündeki metin rengi — beyaz yeterli kontrast vermiyor */
-  --color-on-glow: #0a1418;
+  /*
+   * 3B klasör katmanları — açık pembe.
+   * Koyu aurora zeminde net seçiliyor ve paletteki magenta vurguyla akraba.
+   * Ön kapak en açık ton; arka kapak ve sekme birer basamak koyu, katman
+   * farkı ancak böyle okunuyor.
+   */
+  --color-folder-back: #f7bcd6;
+  --color-folder-front: #ffd9e8;
+  --color-folder-tab: #eda6c6;
 }
 
 @theme inline {
-  --font-sans: var(--font-inter-tight);
-  --font-display: var(--font-inter-tight);
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-figtree);
   --font-mono: var(--font-geist-mono);
 }
 
+/*
+ * Aurora gradyanı. Sabit (fixed) bir katman: sayfa kayarken zemin kaymasın,
+ * her route aynı zemini paylaşsın. Sticky navbar ve landing'in h-[100svh]
+ * kurgusuyla çakışmaması için bir wrapper div değil, body'nin arkasında
+ * duran bir katman olarak kuruldu.
+ */
 body {
-  background-color: var(--color-canvas);
   color: var(--color-ink);
-  /*
-   * Köşelerden gelen ışık huzmeleri. Opaklık düşük tutuldu: amaç zemine
-   * derinlik katmak, aydınlatmak değil — metin kontrastı korunmalı.
-   */
-  background-image:
-    radial-gradient(
-      55rem 38rem at 8% -8%,
-      rgb(34 211 238 / 0.16),
-      transparent 60%
-    ),
-    radial-gradient(
-      50rem 34rem at 95% 2%,
-      rgb(240 52 159 / 0.14),
-      transparent 60%
-    ),
-    radial-gradient(
-      46rem 34rem at 80% 98%,
-      rgb(34 211 238 / 0.1),
-      transparent 62%
-    );
-  background-attachment: fixed;
+  background-color: var(--color-canvas);
 }
 
-/* Dev başlıklar: sıkı kerning, referans tasarımdaki neo-grotesk duruşu. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 85% 65% at 8% 8%,
+      rgb(124 58 237 / 0.38),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 75% 60% at 88% 30%,
+      rgb(14 165 165 / 0.34),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 70% 60% at 15% 85%,
+      rgb(219 39 119 / 0.32),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 70% 60% at 92% 92%,
+      rgb(37 99 235 / 0.36),
+      transparent 62%
+    ),
+    linear-gradient(180deg, #241b33 0%, #14101f 100%);
+}
+
+/* Dev başlıklarda kalın ağırlık + sıkı kerning — referans tasarımın duruşu. */
 .font-display {
+  font-weight: 800;
   letter-spacing: -0.035em;
 }
 
 /*
  * LIQUID GLASS
  *
- * Katmanlar: (1) arkayı bulanıklaştıran backdrop-filter, (2) yarı saydam
- * renk, (3) üst kenarda beyaz specular çizgi + altta yumuşak iç yansıma
- * veren inset shadow'lar. ::after camın üst yarısına vuran ışık.
+ * Katmanlar: (1) backdrop-filter arkadaki aurora'yı bulandırır, (2) yarı
+ * saydam beyaz dolgu, (3) üst kenarda specular çizgi veren inset shadow.
  */
 @utility glass-base {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
   transition:
-    translate 200ms ease,
-    box-shadow 200ms ease,
-    background-color 200ms ease;
+    translate 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
 
   &::after {
     content: "";
@@ -108,7 +135,7 @@ body {
     z-index: -1;
     background: linear-gradient(
       180deg,
-      rgb(255 255 255 / 0.22),
+      rgb(255 255 255 / 0.25),
       rgb(255 255 255 / 0)
     );
     pointer-events: none;
@@ -123,22 +150,22 @@ body {
   }
 }
 
-/* Renksiz cam — ikincil aksiyonlar. */
+/* Renksiz cam — ikincil aksiyonlar, paneller, çipler. */
 @utility glass-clear {
-  background-color: rgb(255 255 255 / 0.09);
-  border: 1px solid rgb(255 255 255 / 0.2);
+  background-color: rgb(255 255 255 / 0.12);
+  border: 1px solid rgb(255 255 255 / 0.24);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.3),
-    inset 0 -10px 18px -14px rgb(255 255 255 / 0.4),
-    0 12px 26px -14px rgb(0 0 0 / 0.7);
+    inset 0 1px 0 rgb(255 255 255 / 0.38),
+    inset 0 -10px 18px -14px rgb(255 255 255 / 0.45),
+    0 12px 30px -14px rgb(0 0 0 / 0.65);
 
   &:hover:not(:disabled) {
-    background-color: rgb(255 255 255 / 0.15);
-    border-color: rgb(255 255 255 / 0.32);
+    background-color: rgb(255 255 255 / 0.18);
+    border-color: rgb(255 255 255 / 0.36);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.42),
-      inset 0 -10px 18px -14px rgb(255 255 255 / 0.5),
-      0 18px 34px -14px rgb(0 0 0 / 0.75);
+      inset 0 1px 0 rgb(255 255 255 / 0.5),
+      inset 0 -10px 18px -14px rgb(255 255 255 / 0.55),
+      0 18px 38px -14px rgb(0 0 0 / 0.7);
   }
 }
 
@@ -153,8 +180,8 @@ body {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.55),
     inset 0 -10px 18px -12px rgb(210 250 255 / 0.6),
-    0 0 24px -6px rgb(34 211 238 / 0.5),
-    0 14px 30px -14px rgb(0 0 0 / 0.8);
+    0 0 26px -6px rgb(34 211 238 / 0.55),
+    0 14px 32px -14px rgb(0 0 0 / 0.8);
 
   &:hover:not(:disabled) {
     background-image: linear-gradient(
@@ -165,8 +192,8 @@ body {
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.7),
       inset 0 -10px 18px -12px rgb(225 252 255 / 0.7),
-      0 0 32px -4px rgb(34 211 238 / 0.7),
-      0 20px 38px -14px rgb(0 0 0 / 0.85);
+      0 0 34px -4px rgb(34 211 238 / 0.75),
+      0 20px 40px -14px rgb(0 0 0 / 0.85);
   }
 }
 
@@ -180,8 +207,8 @@ body {
   border: 1px solid rgb(255 190 200 / 0.45);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.45),
-    0 0 20px -8px rgb(251 113 133 / 0.5),
-    0 14px 30px -14px rgb(0 0 0 / 0.8);
+    0 0 22px -8px rgb(251 113 133 / 0.5),
+    0 14px 32px -14px rgb(0 0 0 / 0.8);
 
   &:hover:not(:disabled) {
     background-image: linear-gradient(
@@ -192,18 +219,18 @@ body {
   }
 }
 
-/* Cam yüzeyli kart — Card bileşeni, landing kartları, paneller. */
+/* Buzlu cam panel — kartlar ve içerik blokları. */
 @utility glass-card {
-  background-color: rgb(255 255 255 / 0.06);
-  border: 1px solid rgb(255 255 255 / 0.14);
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  background-color: rgb(255 255 255 / 0.08);
+  border: 1px solid rgb(255 255 255 / 0.18);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.22),
-    0 18px 40px -24px rgb(0 0 0 / 0.9);
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    0 22px 50px -28px rgb(0 0 0 / 0.85);
 }
 
-/* Başlıkta tek kelimeyi vurgulamak için siyan→magenta gradyan metin. */
+/* Başlıkta tek kelimeyi vurgulamak için gradyan metin. */
 @utility text-glow-gradient {
   background-image: linear-gradient(
     100deg,
@@ -214,26 +241,66 @@ body {
   color: transparent;
 }
 
-/* Hero'nun arkasındaki yavaşça nefes alan ışık küresi. */
-@keyframes breathe {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.85;
-    transform: scale(1.08);
+/*
+ * Ok ile klasör arasındaki akan iz.
+ *
+ * Kesik çizgi sağa doğru kayıyor: durağan bir çizgi "ayraç" gibi okunuyordu,
+ * hareket yönü ekleyince "oradan oraya git" anlamı çıkıyor.
+ */
+@keyframes trail-flow {
+  to {
+    background-position-x: 14px;
   }
 }
 
-@utility orb {
-  animation: breathe 9s ease-in-out infinite;
+@utility trail {
+  background-image: linear-gradient(
+    90deg,
+    rgb(34 211 238 / 0.75) 0 7px,
+    transparent 7px 14px
+  );
+  background-size: 14px 1px;
+  background-repeat: repeat-x;
+  animation: trail-flow 700ms linear infinite;
+  mask-image: linear-gradient(90deg, rgb(0 0 0 / 1), transparent);
 }
 
-/* Hareket hassasiyeti olan kullanıcılar için animasyonu kapat. */
+/*
+ * Klasörden saçılan ürün kartları.
+ *
+ * NEDEN CSS ANIMATION, state + requestAnimationFrame DEĞİL: React 19
+ * eşzamanlı render'da commit'i erteleyebiliyor, bu yüzden "önce başlangıç
+ * konumunda boya, sonraki frame'de hedefe geç" yaklaşımı yarış koşuluna
+ * giriyor ve kartlar başlangıç ölçeğinde takılı kalıyordu. CSS animasyonu
+ * eleman mount olduğu anda başlar; `both` fill mode gecikme boyunca
+ * başlangıç karesini tutar.
+ *
+ * --dx/--dy: kartın nihai konumundan klasörün merkezine olan fark.
+ */
+@keyframes scatter-in {
+  from {
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)))
+      rotate(0deg) scale(0.2);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(var(--r)) scale(1);
+    opacity: 1;
+  }
+}
+
+@utility scatter-card {
+  animation: scatter-in var(--dur) cubic-bezier(0.22, 1, 0.36, 1) var(--delay)
+    both;
+}
+
+/* Hareket hassasiyeti olan kullanıcılar için animasyonları sadeleştir. */
 @media (prefers-reduced-motion: reduce) {
-  .orb {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

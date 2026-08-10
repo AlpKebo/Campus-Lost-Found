@@ -2,8 +2,9 @@ import Link from "next/link";
 
 import { LogoutButton } from "@/components/LogoutButton";
 import { SetupNotice } from "@/components/SetupNotice";
-import { ButtonLink } from "@/components/ui/Button";
-import { CATEGORIES } from "@/lib/constants";
+import { AnimatedFolder } from "@/components/ui/folder-stack";
+import { Wordmark } from "@/components/ui/Logo";
+import { LANDING_ITEMS } from "@/lib/landing-items.generated";
 import { getCurrentProfile } from "@/lib/supabase/server";
 
 /**
@@ -11,18 +12,14 @@ import { getCurrentProfile } from "@/lib/supabase/server";
  *
  * SAHİBİ: student1 (brief bölüm 1). student2 bu dosyaya dokunmasın.
  *
- * Kurgu: tek ekranda etki yaratan dev başlık + doğrudan işe yarayan cam
- * arama kutusu. Arama formu GET ile /browse'a gider, yani student2'nin
- * filtre sözleşmesini (querystring'deki `q`) aynen kullanır — landing'in
- * kendi arama mantığı yok, tek kaynak browse sayfası.
+ * Kurgu: tek ekrana sığan, menüsüz bir giriş. Navbar burada gizleniyor
+ * (bkz. AppChrome); brief bölüm 1'in "login alanı landing'de de görünmeli"
+ * şartını sağ üstteki cam hap karşılıyor.
+ *
+ * Klasördeki ürün görselleri fal.ai ile üretildi ve repoda public/
+ * landing-items altında duruyor (bkz. npm run landing:images). Bunlar
+ * dekoratif: gerçek ilan verisi Browse'da.
  */
-
-/** Hero altında hızlı giriş için öne çıkan kategoriler. */
-const QUICK_CATEGORIES = CATEGORIES.filter((category) =>
-  ["electronics", "keys", "wallet_money", "bag", "id_cards"].includes(
-    category.value,
-  ),
-);
 
 const STEPS = [
   {
@@ -46,132 +43,183 @@ export default async function HomePage() {
   const profile = await getCurrentProfile();
 
   return (
-    <div className="py-6 sm:py-10">
-      <SetupNotice />
+    // md üstünde tek ekrana kilitli; altında dikey akmasına izin veriyoruz
+    // çünkü telefonda üç sütun + üç kart tek ekrana sığmıyor.
+    <div className="relative flex min-h-[100svh] flex-col px-5 py-4 sm:px-8 md:h-[100svh] md:overflow-hidden">
+      {/*
+        Üst şerit: solda kelime markası, sağda login. Menü yok — brief bölüm
+        1'in "login landing'de de görünmeli" şartını sağdaki öğe karşılıyor.
+        absolute: akıştan çıkıyor ki içerik viewport'un tamamına göre
+        ortalansın, şeridin yüksekliği kadar aşağı kaymasın.
+      */}
+      <div className="absolute inset-x-5 top-4 z-20 flex items-center justify-between sm:inset-x-8">
+        <Link href="/" aria-label="Campus Lost & Found" className="group">
+          <Wordmark />
+        </Link>
+      </div>
 
-      {/* Hero. Işık küresi dekoratif; okuyuculardan gizli. */}
-      <section className="relative isolate">
-        <div
-          aria-hidden
-          className="orb pointer-events-none absolute -top-32 left-1/2 -z-10 size-[34rem] -translate-x-1/2 rounded-full blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, rgb(34 211 238 / 0.28), rgb(240 52 159 / 0.14) 45%, transparent 70%)",
-          }}
-        />
-
-        <p className="text-center text-xs font-bold uppercase tracking-[0.3em] text-glow">
-          Campus Lost &amp; Found
-        </p>
-
-        <h1 className="mt-5 text-center font-display text-5xl leading-[0.92] font-extrabold text-ink sm:text-7xl">
-          FIND WHAT
-          <br />
-          YOU&apos;VE <span className="text-glow-gradient">LOST</span>
-        </h1>
-
-        <p className="mx-auto mt-6 max-w-xl text-center text-base text-ink-soft sm:text-lg">
-          Lost something on campus, or found something that isn&apos;t yours?
-          Post it, search it, claim it — and get it back to its owner.
-        </p>
-
-        {/* Cam arama kutusu — /browse'a GET ile gider. */}
-        <form
-          action="/browse"
-          method="get"
-          role="search"
-          className="glass-base glass-clear mx-auto mt-9 flex max-w-xl items-center gap-2 rounded-full p-2"
-        >
-          <label htmlFor="hero-search" className="sr-only">
-            Search items
-          </label>
-          <svg
-            aria-hidden
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            className="ml-3 size-5 shrink-0 text-ink-faint"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-3.5-3.5" />
-          </svg>
-          <input
-            id="hero-search"
-            name="q"
-            type="search"
-            maxLength={100}
-            placeholder="What are you looking for?"
-            className="min-w-0 flex-1 bg-transparent py-2 text-sm text-ink placeholder:text-ink-faint focus:outline-none sm:text-base"
-          />
-          <button
-            type="submit"
-            className="glass-base glass-accent shrink-0 rounded-full px-5 py-2.5 text-sm font-bold text-on-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-glow"
-          >
-            Search
-          </button>
-        </form>
-
-        {/* Kategori çipleri — aramayı boş bırakıp doğrudan filtreye atlar. */}
-        <ul className="mx-auto mt-5 flex max-w-2xl flex-wrap justify-center gap-2">
-          {QUICK_CATEGORIES.map((category) => (
-            <li key={category.value}>
-              <Link
-                href={`/browse?category=${category.value}`}
-                className="glass-base glass-clear inline-block rounded-full px-4 py-1.5 text-sm font-medium text-ink-soft hover:text-ink"
-              >
-                {category.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <ButtonLink href="/browse">Browse all items</ButtonLink>
-          <ButtonLink href="/report" variant="secondary">
-            Report an item
-          </ButtonLink>
-        </div>
-      </section>
-
-      {/* Brief bölüm 1: login / logout alanı ana sayfada da görünür olmalı,
-          çünkü navbar'daki kullanıcı bilgisi küçük ekranlarda gizleniyor. */}
-      <div className="mt-10 flex justify-center">
+      <header className="absolute top-4 right-5 z-20 sm:right-8">
         {profile ? (
-          <div className="glass-card flex flex-col items-center gap-3 rounded-2xl px-5 py-4 sm:flex-row sm:gap-4">
-            <span className="text-left text-sm leading-tight">
-              <span className="block font-semibold text-ink">
-                {profile.name ?? "Unnamed user"}
-              </span>
-              <span className="block text-ink-faint">{profile.email}</span>
+          <div className="glass-base glass-clear flex items-center gap-3 rounded-full py-1.5 pr-1.5 pl-4">
+            <span className="text-sm font-medium text-ink">
+              {profile.name ?? "Unnamed user"}
             </span>
             {!profile.name && (
-              <ButtonLink href="/profile-setup" size="sm" variant="secondary">
-                Add your name
-              </ButtonLink>
+              <Link
+                href="/profile-setup"
+                className="text-sm font-semibold text-glow underline-offset-4 hover:underline"
+              >
+                Add name
+              </Link>
             )}
             <LogoutButton />
           </div>
         ) : (
-          <ButtonLink href="/login" variant="ghost" size="sm">
-            Already have an account? Log in
-          </ButtonLink>
+          <Link
+            href="/login"
+            className="glass-base glass-clear rounded-full px-5 py-2 text-sm font-bold text-ink"
+          >
+            Log in
+          </Link>
         )}
-      </div>
+      </header>
 
-      {/* İnce 3 adım şeridi. */}
-      <ol className="mt-14 grid gap-4 sm:grid-cols-3">
+      <SetupNotice />
+
+      {/*
+        Hero ve adım şeridi tek bir blok olarak dikeyde ortalanıyor.
+        Önceden main flex-1 idi ve boşluğun tamamı ikisinin ARASINA
+        düşüyordu; böylece adımlar yukarı geldi, artan boşluk alta kaldı.
+      */}
+      {/*
+        Hero ve adım şeridi tek blok olarak dikeyde ortalanıyor. Aradaki
+        boşluk bilerek geniş: adım şeridi ekranın alt yarısına insin,
+        altta yalnızca ince bir pay kalsın.
+      */}
+      <div className="flex flex-1 flex-col justify-center gap-16 pb-4 xl:gap-24">
+        <main className="mx-auto grid w-full max-w-6xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-4 xl:gap-8">
+          <div className="text-center md:text-left">
+            <h1 className="font-display text-5xl leading-[1.0] text-ink md:text-6xl xl:text-7xl">
+              We find what
+              <br />
+              you&apos;ve <span className="text-glow-gradient">lost</span>.
+            </h1>
+
+            {/*
+              İki satır, iki renk: ilki kurulum (lila), ikincisi vurucu kısım
+              ve başlıktaki "lost" ile aynı siyan→magenta gradyanı taşıyor —
+              göz ikisini birbirine bağlasın diye.
+            */}
+            <p className="mx-auto mt-5 max-w-lg text-xl leading-snug font-semibold italic md:mx-0 xl:text-2xl">
+              <span className="block text-violet-100">
+                Like finding a folder you were sure was gone
+              </span>
+              <span className="text-glow-gradient block font-bold">
+                it was sitting there the whole time.
+              </span>
+            </p>
+
+            <p className="mt-5 text-sm text-ink-soft">
+              Found something instead?{" "}
+              <Link
+                href="/report"
+                className="font-bold text-ink underline underline-offset-4 hover:text-glow"
+              >
+                Report an item
+              </Link>
+            </p>
+          </div>
+
+          {/*
+            Ok butonu — klasörle aynı yere gider. Sağına akan kesik çizgi bir
+            iz ekledik: ok ile klasör arasındaki ilişki daha önce
+            okunmuyordu, şimdi "buradan oraya" gözle takip ediliyor.
+          */}
+          <div className="relative flex justify-center">
+            <Link
+              href="/browse"
+              className="glass-base glass-accent group flex size-14 items-center justify-center rounded-full text-on-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-glow xl:size-20"
+              aria-label="Open the lost and found"
+            >
+              <svg
+                aria-hidden
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-7 transition-transform duration-300 group-hover:translate-x-1"
+              >
+                <path d="M5 12h14" />
+                <path d="m13 5 7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          {/*
+            İz, ok ile klasör arasındaki boşluğu tam dolduruyor. Sabit
+            genişlik yerine flex-1: kolon genişliği viewport'a göre
+            değiştiği için ancak böyle her boyutta klasöre kadar uzanıyor.
+          */}
+          <div className="flex items-center md:justify-end">
+            <span aria-hidden className="trail hidden h-px flex-1 md:block" />
+            <AnimatedFolder
+              items={LANDING_ITEMS}
+              label="Open the lost and found"
+              className="scale-90 xl:scale-100"
+            />
+          </div>
+        </main>
+
+        {/*
+          Alt şerit: üç adım, üstlerinden geçen bir ray ile bağlı.
+          Ray kenarlarda saydamlaşarak bitiyor — çerçeve gibi değil, akış gibi
+          okunsun diye. Ray ve düğümler dekoratif, ekran okuyucu listeyi
+          olduğu gibi okuyor.
+        */}
+        <ol className="relative mx-auto grid w-full max-w-6xl shrink-0 gap-3 pt-5 sm:grid-cols-3">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute top-[7px] right-[16.66%] left-[16.66%] hidden h-px sm:block"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35) 18%, rgb(255 255 255 / 0.35) 82%, transparent)",
+          }}
+        />
+
         {STEPS.map((step) => (
-          <li key={step.number} className="glass-card rounded-2xl p-5">
-            <span className="font-display text-2xl font-extrabold text-glow">
-              {step.number}
-            </span>
-            <p className="mt-2 text-base font-bold text-ink">{step.title}</p>
-            <p className="mt-1 text-sm text-ink-soft">{step.body}</p>
+          <li key={step.number} className="relative">
+            {/* Ray üzerindeki düğüm ve karta inen sap */}
+            <span
+              aria-hidden
+              className="absolute -top-5 left-1/2 hidden size-[9px] -translate-x-1/2 rounded-full bg-glow shadow-[0_0_10px_2px_rgb(34_211_238_/_0.5)] sm:block"
+            />
+            <span
+              aria-hidden
+              className="absolute -top-[11px] left-1/2 hidden h-[11px] w-px -translate-x-1/2 bg-white/25 sm:block"
+            />
+
+            {/*
+              Hiyerarşi: numara (siyan, küçük) → başlık (iri ve extrabold) →
+              gövde. Önceden başlık ile gövde neredeyse aynı ağırlıktaydı,
+              "Report/Browse/Claim" başlık olduğu okunmuyordu.
+            */}
+            <div className="glass-card h-full rounded-2xl px-5 py-4">
+              <span className="text-sm font-extrabold tracking-widest text-glow">
+                {step.number}
+              </span>
+              <p className="mt-1 text-xl font-extrabold tracking-tight text-ink">
+                {step.title}
+              </p>
+              <p className="mt-1 text-sm leading-snug font-medium text-ink-soft">
+                {step.body}
+              </p>
+            </div>
           </li>
         ))}
-      </ol>
+        </ol>
+      </div>
     </div>
   );
 }

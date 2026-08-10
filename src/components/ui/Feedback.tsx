@@ -23,7 +23,7 @@ export function EmptyState({
 }) {
   return (
     <div className="rounded-2xl border-2 border-dashed border-white/20 bg-white/5 px-6 py-12 text-center backdrop-blur-md">
-      <p className="font-display text-lg font-semibold text-ink">{title}</p>
+      <p className="text-lg font-semibold text-ink">{title}</p>
       {description && (
         <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
           {description}
@@ -64,7 +64,7 @@ export function PageHeader({
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
           {title}
         </h1>
         {description && (

@@ -263,10 +263,10 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
             {ITEM_TYPES.map((option) => (
               <label
                 key={option.value}
-                className={`flex-1 cursor-pointer rounded-lg border px-4 py-2.5 text-center text-sm font-medium ${
+                className={`flex-1 cursor-pointer rounded-full px-4 py-2.5 text-center text-sm font-semibold ${
                   fields.type === option.value
-                    ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
-                    : "border-neutral-300 text-neutral-700 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
+                    ? "glass-base glass-accent text-on-glow"
+                    : "glass-base glass-clear text-ink-soft hover:text-ink"
                 }`}
               >
                 <input
