@@ -49,7 +49,7 @@ export async function generateMetadata({
   if (!isSupabaseConfigured) return { title: "Item — Campus Lost & Found" };
 
   const item = await loadItem((await params).id);
-  if (!item) return { title: "İlan bulunamadı — Campus Lost & Found" };
+  if (!item) return { title: "Listing not found — Campus Lost & Found" };
 
   return {
     title: `${item.title} — Campus Lost & Found`,
@@ -96,7 +96,7 @@ export default async function ItemDetailPage({ params }: PageProps) {
         href="/browse"
         className="mb-6 inline-block text-sm text-neutral-500 underline-offset-4 hover:underline dark:text-neutral-400"
       >
-        ← Browse&apos;a dön
+        ← Back to Browse
       </Link>
 
       <div className="grid gap-8 lg:grid-cols-2">
@@ -113,7 +113,7 @@ export default async function ItemDetailPage({ params }: PageProps) {
               />
             ) : (
               <div className="flex h-full items-center justify-center text-sm text-neutral-400">
-                Görsel yok
+                No image
               </div>
             )}
           </div>
@@ -134,18 +134,18 @@ export default async function ItemDetailPage({ params }: PageProps) {
           </p>
 
           <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-            <dt className="text-neutral-500 dark:text-neutral-400">Kategori</dt>
+            <dt className="text-ink-soft">Category</dt>
             <dd className="text-neutral-900 dark:text-neutral-100">
               {CATEGORY_LABELS[item.category]}
             </dd>
 
-            <dt className="text-neutral-500 dark:text-neutral-400">Konum</dt>
+            <dt className="text-ink-soft">Location</dt>
             <dd className="text-neutral-900 dark:text-neutral-100">
               {item.location}
             </dd>
 
             <dt className="text-neutral-500 dark:text-neutral-400">
-              {item.type === "lost" ? "Kaybedildiği tarih" : "Bulunduğu tarih"}
+              {item.type === "lost" ? "Date lost" : "Date found"}
             </dt>
             <dd className="text-neutral-900 dark:text-neutral-100">
               {formatItemDate(item.item_date)}
@@ -188,24 +188,24 @@ function ClaimPanel({
 }) {
   if (isOwner) {
     return (
-      <Note title="Bu senin ilanın">
-        Gelen claim&apos;leri{" "}
+      <Note title="This is your listing">
+        You can see incoming claims on your{" "}
         <Link href="/my-listings" className="underline underline-offset-4">
           My Listings
         </Link>{" "}
-        sayfasından görebilirsin.
+        page.
       </Note>
     );
   }
 
   if (item.type === "lost") {
     return (
-      <Note title="Bu bir kayıp ilanı">
-        Kayıp ilanlarına claim gönderilmez. Bu eşyayı bulduysan kendi{" "}
+      <Note title="This is a lost listing">
+        Lost listings don&apos;t take claims. If you found this item, post your own{" "}
         <Link href="/report" className="underline underline-offset-4">
-          Found ilanını
+          Found listing
         </Link>{" "}
-        aç; sahibi seni oradan bulur.
+        — the owner will find you there.
       </Note>
     );
   }
@@ -215,16 +215,16 @@ function ClaimPanel({
       <div>
         <div className="mb-2 flex items-center gap-2">
           <h2 className="font-medium text-neutral-900 dark:text-neutral-100">
-            Claim&apos;ini gönderdin
+            You sent a claim
           </h2>
           <ClaimStatusBadge status={myClaim.status} />
         </div>
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {myClaim.status === "accepted"
-            ? "Onaylandı. İlan sahibinin iletişim bilgileri Sent Claims sayfanda."
+            ? "Accepted. The owner's contact details are on your Sent Claims page."
             : myClaim.status === "rejected"
-              ? "İlan sahibi bu claim'i reddetti."
-              : "İlan sahibinin yanıtı bekleniyor."}
+              ? "The owner rejected this claim."
+              : "Waiting for the owner to respond."}
         </p>
         <div className="mt-4">
           <ButtonLink href="/sent-claims" variant="secondary" size="sm">
@@ -237,9 +237,9 @@ function ClaimPanel({
 
   if (item.status !== "open") {
     return (
-      <Note title="Bu ilan claim kabul etmiyor">
-        İlan şu anda &quot;{item.status}&quot; durumunda. Sahibi olduğunu
-        düşünüyorsan ilan sahibiyle başka bir yoldan iletişime geç.
+      <Note title="This listing isn't accepting claims">
+        Its status is currently &quot;{item.status}&quot;. If you believe it&apos;s
+        yours, reach out to the owner another way.
       </Note>
     );
   }
@@ -248,14 +248,14 @@ function ClaimPanel({
     return (
       <div>
         <h2 className="font-medium text-neutral-900 dark:text-neutral-100">
-          Bu eşya senin mi?
+          Is this yours?
         </h2>
-        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-          Claim göndermek için giriş yapman gerekiyor.
+        <p className="mt-1 text-sm text-ink-soft">
+          You need to log in to send a claim.
         </p>
         <div className="mt-4">
           <ButtonLink href={`/login?next=/items/${item.id}`}>
-            Giriş yap
+            Log in
           </ButtonLink>
         </div>
       </div>
@@ -265,7 +265,7 @@ function ClaimPanel({
   return (
     <div>
       <h2 className="mb-3 font-medium text-neutral-900 dark:text-neutral-100">
-        Bu eşya senin mi?
+        Is this yours?
       </h2>
       <ClaimForm itemId={item.id} />
     </div>

@@ -29,7 +29,7 @@ export default async function ReportPage() {
     <div className="mx-auto max-w-2xl py-6">
       <PageHeader
         title="Report Item"
-        description="Kaybettiğin veya bulduğun eşyayı yayınla. İlan yayınlandıktan sonra My Listings sayfasından yönetebilirsin."
+        description="Post something you lost or found. Once it's live you can manage it from My Listings."
       />
 
       <Card className="p-6">

@@ -50,14 +50,14 @@ export async function RelatedItems({ item }: { item: Item }) {
     <section className="mt-14 border-t border-neutral-200 pt-10 dark:border-neutral-800">
       <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-50">
         {item.type === "lost"
-          ? `Bulunan ${category} ilanları`
-          : `Kayıp ${category} ilanları`}
+          ? `Found ${category} listings`
+          : `Lost ${category} listings`}
       </h2>
 
       <p className="mt-1 mb-6 text-sm text-neutral-500 dark:text-neutral-400">
         {item.type === "lost"
-          ? "Bu eşya bulunup ilan edilmiş olabilir. Aynı kategorideki bulunan eşyalar:"
-          : "Bu eşyanın sahibi onu aramış olabilir. Aynı kategorideki kayıp ilanları:"}
+          ? "Someone may have found and posted it. Found items in the same category:"
+          : "The owner may already be looking for it. Lost listings in the same category:"}
       </p>
 
       <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -75,7 +75,7 @@ export async function RelatedItems({ item }: { item: Item }) {
 export function RelatedItemsSkeleton() {
   return (
     <section className="mt-14 border-t border-neutral-200 pt-10 dark:border-neutral-800">
-      <LoadingRegion label="Benzer ilanlar yükleniyor">
+      <LoadingRegion label="Loading related listings">
         <Skeleton className="h-6 w-56" />
         <Skeleton className="mt-2 mb-6 h-4 w-80 max-w-full" />
 

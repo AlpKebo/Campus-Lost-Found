@@ -5,12 +5,12 @@
  */
 
 const MONTHS = [
-  "Oca", "Şub", "Mar", "Nis", "May", "Haz",
-  "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara",
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
 /**
- * "2026-08-10" → "10 Ağu 2026".
+ * "2026-08-10" → "Aug 10, 2026".
  *
  * Intl yerine sabit liste: server ve client aynı çıktıyı vermezse React
  * hydration uyarısı basar, tarih formatı da tarayıcı diline göre kayar.
@@ -18,10 +18,10 @@ const MONTHS = [
 export function formatItemDate(value: string): string {
   const [year, month, day] = value.split("-").map(Number);
   if (!year || !month || !day || month < 1 || month > 12) return value;
-  return `${day} ${MONTHS[month - 1]} ${year}`;
+  return `${MONTHS[month - 1]} ${day}, ${year}`;
 }
 
-/** "2026-08-10T09:31:00Z" → "10 Ağu 2026". */
+/** "2026-08-10T09:31:00Z" → "Aug 10, 2026". */
 export function formatTimestamp(value: string): string {
   return formatItemDate(value.slice(0, 10));
 }

@@ -22,10 +22,10 @@ export default function BrowseError({
     <RouteError
       error={error}
       retry={retry}
-      title="İlanlar yüklenemedi"
-      description="Beklenmedik bir hata oldu. Bağlantını kontrol edip tekrar deneyebilirsin."
+      title="Couldn't load listings"
+      description="Something unexpected went wrong. Check your connection and try again."
       backHref="/"
-      backLabel="Ana sayfaya dön"
+      backLabel="Back to home"
     />
   );
 }

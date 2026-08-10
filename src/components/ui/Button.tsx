@@ -5,26 +5,21 @@ type Variant = "primary" | "secondary" | "danger" | "ghost";
 type Size = "sm" | "md";
 
 const BASE =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors " +
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold " +
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 " +
-  "disabled:cursor-not-allowed disabled:opacity-50";
+  "focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50";
 
 const VARIANTS: Record<Variant, string> = {
-  primary:
-    "bg-neutral-900 text-white hover:bg-neutral-700 focus-visible:outline-neutral-900 " +
-    "dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200",
-  secondary:
-    "bg-white text-neutral-900 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 " +
-    "dark:bg-neutral-900 dark:text-neutral-100 dark:ring-neutral-700 dark:hover:bg-neutral-800",
-  danger:
-    "bg-rose-600 text-white hover:bg-rose-700 focus-visible:outline-rose-600",
-  ghost:
-    "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800",
+  primary: "glass-base glass-accent text-on-glow",
+  secondary: "glass-base glass-clear text-ink",
+  danger: "glass-base glass-danger text-white",
+  // Ghost cam değil: yoğunluk hiyerarşisi kalsın diye düz kalıyor.
+  ghost: "text-ink-soft transition-colors hover:bg-white/10 hover:text-ink",
 };
 
 const SIZES: Record<Size, string> = {
-  sm: "h-9 px-3 text-sm",
-  md: "h-11 px-4 text-sm sm:text-base",
+  sm: "h-9 px-4 text-sm",
+  md: "h-11 px-5 text-sm sm:text-base",
 };
 
 function classes(variant: Variant, size: Size, className?: string) {

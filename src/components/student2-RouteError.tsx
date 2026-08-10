@@ -46,21 +46,17 @@ export function RouteError({
   return (
     <div className="py-16">
       <div className="mx-auto max-w-md text-center">
-        <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-50">
-          {title}
-        </h1>
+        <h1 className="font-display text-xl font-bold text-ink">{title}</h1>
 
-        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-          {description}
-        </p>
+        <p className="mt-2 text-sm text-ink-soft">{description}</p>
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Button onClick={() => retry()}>Tekrar dene</Button>
+          <Button onClick={() => retry()}>Try again</Button>
 
           {backHref && backLabel && (
             <Link
               href={backHref}
-              className="text-sm text-neutral-500 underline-offset-4 hover:underline dark:text-neutral-400"
+              className="text-sm text-ink-soft underline-offset-4 hover:underline"
             >
               {backLabel}
             </Link>
@@ -68,8 +64,8 @@ export function RouteError({
         </div>
 
         {error.digest && (
-          <p className="mt-6 font-mono text-xs text-neutral-400 dark:text-neutral-600">
-            Hata kodu: {error.digest}
+          <p className="mt-6 font-mono text-xs text-ink-faint">
+            Error code: {error.digest}
           </p>
         )}
       </div>

@@ -21,10 +21,10 @@ export default function ItemDetailError({
     <RouteError
       error={error}
       retry={retry}
-      title="İlan yüklenemedi"
-      description="Bu ilan getirilirken beklenmedik bir hata oldu. Tekrar deneyebilir ya da listeye dönebilirsin."
+      title="Couldn't load this listing"
+      description="Something unexpected went wrong loading this listing. Try again, or go back to the list."
       backHref="/browse"
-      backLabel="Browse'a dön"
+      backLabel="Back to Browse"
     />
   );
 }

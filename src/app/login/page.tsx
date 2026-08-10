@@ -50,35 +50,35 @@ function LoginForm() {
   return (
     <div className="mx-auto max-w-md py-10">
       <Card className="p-6">
-        <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-50">
-          Login
-        </h1>
-        <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-          E-posta adresini gir, sana giriş linki gönderelim. Şifre gerekmiyor.
+        <h1 className="font-display text-xl font-bold text-ink">Log in</h1>
+        <p className="mt-1 text-sm text-ink-soft">
+          Enter your email and we&apos;ll send you a sign-in link. No password
+          needed.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {callbackError && (
             <FormError>
-              Giriş linki doğrulanamadı. Link süresi dolmuş olabilir, tekrar dene.
+              We couldn&apos;t verify that sign-in link. It may have expired —
+              please try again.
             </FormError>
           )}
           {error && <FormError>{error}</FormError>}
           {status === "sent" && (
             <FormSuccess>
-              Giriş linki <strong>{email}</strong> adresine gönderildi.
-              E-postandaki linke tıkla.
+              A sign-in link has been sent to <strong>{email}</strong>. Click the
+              link in your inbox.
             </FormSuccess>
           )}
 
           <div>
-            <Label htmlFor="email">E-posta</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               required
               autoComplete="email"
-              placeholder="ornek@ogrenci.edu.tr"
+              placeholder="you@student.edu"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               disabled={status === "loading" || status === "sent"}
@@ -91,7 +91,7 @@ function LoginForm() {
             disabled={status === "loading" || status === "sent"}
           >
             {status === "loading" && <Spinner />}
-            {status === "sent" ? "Link gönderildi" : "Magic Link gönder"}
+            {status === "sent" ? "Link sent" : "Send magic link"}
           </Button>
         </form>
       </Card>

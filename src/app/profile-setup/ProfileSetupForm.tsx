@@ -30,10 +30,10 @@ export function ProfileSetupForm({
   function validate(value: string) {
     const trimmed = value.trim();
     if (trimmed.length < MIN_NAME_LENGTH) {
-      return `Ad Soyad en az ${MIN_NAME_LENGTH} karakter olmalı.`;
+      return `Your name must be at least ${MIN_NAME_LENGTH} characters.`;
     }
     if (trimmed.length > MAX_NAME_LENGTH) {
-      return `Ad Soyad en fazla ${MAX_NAME_LENGTH} karakter olabilir.`;
+      return `Your name can be at most ${MAX_NAME_LENGTH} characters.`;
     }
     return null;
   }
@@ -72,7 +72,7 @@ export function ProfileSetupForm({
       {formError && <FormError>{formError}</FormError>}
 
       <div>
-        <Label htmlFor="name">Ad Soyad</Label>
+        <Label htmlFor="name">Full name</Label>
         <Input
           id="name"
           name="name"
@@ -81,7 +81,7 @@ export function ProfileSetupForm({
           autoFocus
           autoComplete="name"
           maxLength={MAX_NAME_LENGTH}
-          placeholder="Onur Çelik"
+          placeholder="Alex Morgan"
           value={name}
           onChange={(event) => {
             setName(event.target.value);
@@ -94,16 +94,16 @@ export function ProfileSetupForm({
       </div>
 
       <div>
-        <Label htmlFor="email">E-posta</Label>
+        <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" value={email} disabled readOnly />
-        <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
-          Giriş yaptığın hesaptan alındı, değiştirilemez.
+        <p className="mt-1.5 text-sm text-ink-soft">
+          Taken from the account you signed in with. It can&apos;t be changed.
         </p>
       </div>
 
       <Button type="submit" className="w-full" disabled={loading}>
         {loading && <Spinner />}
-        Kaydet ve devam et
+        Save and continue
       </Button>
     </form>
   );

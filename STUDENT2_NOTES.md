@@ -38,6 +38,8 @@ Proje kurallarının tamamı için `README.md`'ye bak.
 | `src/components/student2-Skeleton.tsx` | İskelet parçaları |
 | `src/components/student2-RouteError.tsx` | Ortak hata ekranı (client) |
 | `supabase/student2_seed_dev.sql` | Geliştirme için örnek ilanlar |
+| `scripts/student2-generate-seed-images.mjs` | Seed ilanlarına fal.ai ile görsel üretir |
+| `scripts/student2-seed-image-prompts.mjs` | Görsel prompt'ları (başlıklar seed SQL ile eşleşir) |
 
 Ortak `src/lib` ve `src/components` altındaki dosyalar bilerek `student2-` ile
 başlıyor: aynı isimde iki dosya açılırsa merge conflict çıkar.
@@ -78,6 +80,35 @@ Yeni bir yardımcı dosya gerekirse ya kendi route klasörüne koy, ya da adın�
   yalnızca tek tür varsa bölüm hiç görünmez — özellik bozuk sanılır. Seed
   dosyası bilerek çapraz çiftler içeriyor, o yapıyı koru.
 - **Windows:** PowerShell'de `&&` çalışmaz, komutları tek tek çalıştır.
+
+## Örnek ilan görselleri (fal.ai)
+
+Seed ilanlar `image_url = ''` ile giriyor, o yüzden Browse kartları "Görsel yok"
+gösteriyor. Doldurmak için:
+
+```bash
+# .env.local içinde FAL_KEY dolu olmalı (https://fal.ai/dashboard/keys)
+npm run seed:images                 # eksik olanları üretir
+npm run seed:images -- --force      # hepsini yeniden üretir
+npm run seed:images -- --only=slug1,slug2
+```
+
+Script görselleri `public/seed-images/<slug>.jpg` altına indirir ve
+`supabase/student2_seed_images.sql` dosyasını üretir — o SQL'i Supabase SQL
+Editor'da çalıştırınca `items.image_url` dolar (`/seed-images/<slug>.jpg`).
+
+- **Storage'a yüklemiyor, bilerek.** `item-images` bucket'ının insert policy'si
+  `{user_id}/...` klasörüne kilitli; script'ten yüklemek service-role anahtarı
+  isterdi. Seed görselleri `public/` altından servis ediliyor, gerçek ilan
+  yükleme akışı (`src/lib/image-upload.ts`) değişmedi.
+- **Eşleşme başlıktan.** Üretilen SQL ilanı `items.title` ile buluyor.
+  `student2_seed_dev.sql` içindeki bir başlığı değiştirirsen
+  `scripts/student2-seed-image-prompts.mjs` içindeki `title` alanını da
+  değiştir, yoksa görsel hiçbir ilana bağlanmaz.
+- `FAL_KEY` sunucu tarafı anahtar — **`NEXT_PUBLIC_` öneki verme.** Uygulama
+  kodu bu anahtarı hiç okumuyor, yalnızca script okuyor.
+- Yerel dosya olduğu için `next.config.ts` içindeki `remotePatterns`'a
+  dokunmaya gerek yok.
 
 ## Doğrulama
 

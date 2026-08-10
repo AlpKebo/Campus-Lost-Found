@@ -8,26 +8,25 @@ export function SetupNotice() {
   if (isSupabaseConfigured) return null;
 
   return (
-    <div className="mb-8 rounded-xl border border-amber-300 bg-amber-50 p-4 text-left text-sm dark:border-amber-900 dark:bg-amber-950">
-      <p className="font-medium text-amber-900 dark:text-amber-100">
-        Supabase henüz bağlı değil
-      </p>
-      <ol className="mt-2 list-decimal space-y-1 pl-5 text-amber-800 dark:text-amber-200">
-        <li>supabase.com üzerinde yeni bir proje aç.</li>
+    <div className="mb-8 rounded-2xl border border-amber-300/30 bg-amber-400/10 p-4 text-left text-sm backdrop-blur-md">
+      <p className="font-semibold text-amber-200">Supabase isn&apos;t connected yet</p>
+      <ol className="mt-2 list-decimal space-y-1 pl-5 text-amber-100/80">
+        <li>Create a new project on supabase.com.</li>
         <li>
-          SQL Editor&apos;da{" "}
-          <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-xs dark:bg-amber-900">
+          Run{" "}
+          <code className="rounded bg-amber-300/15 px-1 py-0.5 font-mono text-xs">
             supabase/schema.sql
           </code>{" "}
-          dosyasını çalıştır.
+          in the SQL Editor.
         </li>
         <li>
-          <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-xs dark:bg-amber-900">
+          Run{" "}
+          <code className="rounded bg-amber-300/15 px-1 py-0.5 font-mono text-xs">
             cp .env.example .env.local
           </code>{" "}
-          yapıp URL ve anon key değerlerini doldur.
+          and fill in your URL and anon key.
         </li>
-        <li>Dev server&apos;ı yeniden başlat.</li>
+        <li>Restart the dev server.</li>
       </ol>
     </div>
   );

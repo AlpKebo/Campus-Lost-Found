@@ -59,26 +59,26 @@ export default async function MyListingsPage() {
     <div className="py-6">
       <PageHeader
         title="My Listings"
-        description="Yayınladığın ilanlar ve durumları."
+        description="The listings you posted and their status."
         action={<ButtonLink href="/report">Report Item</ButtonLink>}
       />
 
       <div className="mb-4 space-y-3 empty:mb-0">
-        {error && <FormError>İlanların yüklenemedi: {error.message}</FormError>}
+        {error && <FormError>Couldn&apos;t load your listings: {error.message}</FormError>}
         {/* Claim'ler gelmezse ilanlar yine listelenir; sadece bu bölüm eksik
             kalır. En olası sebep: student1_accept_claim.sql / schema.sql
             henüz çalıştırılmamış. */}
         {claimsError && (
           <FormError>
-            Gelen claim&apos;ler yüklenemedi: {claimsError.message}
+            Couldn&apos;t load incoming claims: {claimsError.message}
           </FormError>
         )}
       </div>
 
       {!error && items && items.length === 0 && (
         <EmptyState
-          title="Henüz ilanın yok"
-          description="Kaybettiğin veya bulduğun bir eşyayı bildirdiğinde burada görünecek."
+          title="You have no listings yet"
+          description="Once you report something you lost or found, it shows up here."
           action={<ButtonLink href="/report">Report Item</ButtonLink>}
         />
       )}

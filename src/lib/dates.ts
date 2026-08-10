@@ -17,9 +17,17 @@ export function todayISODate(): string {
   ].join("-");
 }
 
-/** "2026-08-10" -> "10.08.2026" */
+/** Site İngilizce; ay adlarını sabit tutuyoruz (bkz. student2-format.ts). */
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+/** "2026-08-10" -> "Aug 10, 2026" */
 export function formatItemDate(isoDate: string): string {
   const [year, month, day] = isoDate.split("-");
   if (!year || !month || !day) return isoDate;
-  return `${day}.${month}.${year}`;
+  const name = MONTHS[Number(month) - 1];
+  if (!name) return isoDate;
+  return `${name} ${Number(day)}, ${year}`;
 }

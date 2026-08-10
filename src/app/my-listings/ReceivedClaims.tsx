@@ -88,7 +88,7 @@ export function ReceivedClaims({
   if (claims.length === 0) {
     return (
       <p className="text-sm text-neutral-500 dark:text-neutral-400">
-        Bu ilana henüz claim gelmedi.
+        No claims on this listing yet.
       </p>
     );
   }
@@ -109,7 +109,7 @@ export function ReceivedClaims({
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                {claim.claimant_name ?? "İsimsiz kullanıcı"}
+                {claim.claimant_name ?? "Unnamed user"}
               </span>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-neutral-500 dark:text-neutral-400">
@@ -132,7 +132,7 @@ export function ReceivedClaims({
             {claim.status === "accepted" && claim.claimant_email && (
               <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">
                 <span className="text-neutral-500 dark:text-neutral-400">
-                  İletişim:{" "}
+                  Contact:{" "}
                 </span>
                 <a
                   href={`mailto:${claim.claimant_email}`}

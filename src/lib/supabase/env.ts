@@ -13,9 +13,8 @@ export const isSupabaseConfigured =
   SUPABASE_URL.length > 0 && SUPABASE_ANON_KEY.length > 0;
 
 export const MISSING_ENV_MESSAGE =
-  "Supabase environment değişkenleri eksik. .env.example dosyasını .env.local " +
-  "olarak kopyalayıp NEXT_PUBLIC_SUPABASE_URL ve NEXT_PUBLIC_SUPABASE_ANON_KEY " +
-  "değerlerini doldur.";
+  "Supabase environment variables are missing. Copy .env.example to .env.local " +
+  "and fill in NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.";
 
 /** Supabase client oluşturmadan önce çağrılır. */
 export function assertSupabaseConfigured() {

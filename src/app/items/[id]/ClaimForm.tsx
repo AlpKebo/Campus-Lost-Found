@@ -32,10 +32,10 @@ function SubmitButton() {
     <Button type="submit" disabled={pending}>
       {pending ? (
         <>
-          <Spinner /> Gönderiliyor
+          <Spinner /> Sending
         </>
       ) : (
-        "Claim gönder"
+        "Send claim"
       )}
     </Button>
   );
@@ -54,21 +54,21 @@ export function ClaimForm({ itemId }: { itemId: string }) {
   return (
     <form action={formAction} className="space-y-3">
       <div>
-        <Label htmlFor="message">Bu eşyanın senin olduğunu nasıl biliyoruz?</Label>
+        <Label htmlFor="message">How do we know this item is yours?</Label>
         <Textarea
           id="message"
           name="message"
           required
           minLength={MESSAGE_MIN}
           maxLength={MESSAGE_MAX}
-          placeholder="Eşyanın ayırt edici bir özelliğini yaz — üzerindeki çizik, içindeki not, kılıfının rengi gibi."
+          placeholder="Describe something only the owner would know — a scratch on it, a note inside, the colour of its case."
           aria-describedby="message-help"
         />
         <p
           id="message-help"
-          className="mt-1.5 text-xs text-neutral-500 dark:text-neutral-400"
+          className="mt-1.5 text-xs text-ink-soft"
         >
-          En az {MESSAGE_MIN} karakter. Bu mesajı yalnızca ilan sahibi görür.
+          At least {MESSAGE_MIN} characters. Only the listing owner sees this message.
         </p>
         {state.status === "error" && <FieldError>{state.message}</FieldError>}
       </div>

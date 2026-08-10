@@ -32,14 +32,14 @@ export async function submitClaim(
   if (message.length < MESSAGE_MIN) {
     return {
       status: "error",
-      message: `Mesajın en az ${MESSAGE_MIN} karakter olmalı.`,
+      message: `Your message must be at least ${MESSAGE_MIN} characters.`,
     };
   }
 
   if (message.length > MESSAGE_MAX) {
     return {
       status: "error",
-      message: `Mesajın en fazla ${MESSAGE_MAX} karakter olabilir.`,
+      message: `Your message can be at most ${MESSAGE_MAX} characters.`,
     };
   }
 
@@ -51,7 +51,7 @@ export async function submitClaim(
   if (!user) {
     return {
       status: "error",
-      message: "Claim göndermek için giriş yapmalısın.",
+      message: "You need to log in to send a claim.",
     };
   }
 
@@ -66,7 +66,7 @@ export async function submitClaim(
     if (error.code === "23505") {
       return {
         status: "error",
-        message: "Bu ilana zaten bir claim göndermişsin.",
+        message: "You have already sent a claim for this listing.",
       };
     }
 
@@ -75,11 +75,11 @@ export async function submitClaim(
       return {
         status: "error",
         message:
-          "Bu ilana claim gönderilemiyor. İlan kapanmış olabilir; sayfayı yenile.",
+          "This listing can't accept claims. It may have been closed — refresh the page.",
       };
     }
 
-    return { status: "error", message: `Claim gönderilemedi: ${error.message}` };
+    return { status: "error", message: `Couldn't send claim: ${error.message}` };
   }
 
   revalidatePath(`/items/${itemId}`);
@@ -88,6 +88,6 @@ export async function submitClaim(
   return {
     status: "success",
     message:
-      "Claim gönderildi. İlan sahibi onaylarsa iletişim bilgileri Sent Claims sayfanda görünecek.",
+      "Claim sent. If the owner accepts, their contact details will appear on your Sent Claims page.",
   };
 }

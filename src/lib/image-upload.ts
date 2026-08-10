@@ -15,15 +15,15 @@ import { createClient } from "@/lib/supabase/client";
 
 /** Dosyayı yüklemeden önce tarayıcıda doğrular. Sorun yoksa null döner. */
 export function validateImageFile(file: File | null): string | null {
-  if (!file) return "Görsel zorunludur.";
+  if (!file) return "An image is required.";
 
   if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-    return `Sadece ${ALLOWED_IMAGE_EXTENSIONS.join(", ")} dosyaları yüklenebilir.`;
+    return `Only ${ALLOWED_IMAGE_EXTENSIONS.join(", ")} files can be uploaded.`;
   }
 
   if (file.size > MAX_IMAGE_BYTES) {
     const limitMb = Math.round(MAX_IMAGE_BYTES / (1024 * 1024));
-    return `Görsel en fazla ${limitMb} MB olabilir.`;
+    return `The image must be ${limitMb} MB or smaller.`;
   }
 
   return null;

@@ -11,10 +11,10 @@ import type { ItemCategory, ItemType } from "@/types/database";
  */
 
 export const SORT_OPTIONS = [
-  { value: "newest", label: "Tarihe göre — yeni" },
-  { value: "oldest", label: "Tarihe göre — eski" },
-  { value: "recent", label: "Son eklenen" },
-  { value: "title", label: "Başlığa göre (A-Z)" },
+  { value: "newest", label: "Date — newest first" },
+  { value: "oldest", label: "Date — oldest first" },
+  { value: "recent", label: "Recently posted" },
+  { value: "title", label: "Title (A-Z)" },
 ] as const;
 
 export type SortValue = (typeof SORT_OPTIONS)[number]["value"];

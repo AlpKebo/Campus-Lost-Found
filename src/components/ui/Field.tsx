@@ -1,17 +1,15 @@
 import type { ComponentProps, ReactNode } from "react";
 
 const CONTROL =
-  "w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 " +
-  "placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-1 " +
-  "focus:ring-neutral-900 disabled:opacity-50 " +
-  "dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-neutral-300 " +
-  "dark:focus:ring-neutral-300";
+  "w-full rounded-xl border border-white/15 bg-white/8 px-3 py-2 text-sm text-ink backdrop-blur-md " +
+  "placeholder:text-ink-faint focus:border-glow focus:outline-none focus:ring-1 " +
+  "focus:ring-glow disabled:opacity-50";
 
 export function Label({ children, htmlFor }: { children: ReactNode; htmlFor?: string }) {
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-1.5 block text-sm font-medium text-neutral-800 dark:text-neutral-200"
+      className="mb-1.5 block text-sm font-semibold text-ink"
     >
       {children}
     </label>

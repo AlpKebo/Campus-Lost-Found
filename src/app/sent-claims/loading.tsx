@@ -12,7 +12,7 @@ import { LoadingRegion, Skeleton } from "@/components/student2-Skeleton";
 export default function SentClaimsLoading() {
   return (
     <div className="py-10">
-      <LoadingRegion label="Claim'ler yükleniyor">
+      <LoadingRegion label="Loading claims">
         <div className="mb-6">
           <Skeleton className="h-9 w-48" />
           <Skeleton className="mt-2 h-4 w-72" />

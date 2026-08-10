@@ -25,7 +25,7 @@ import type { SentClaim } from "@/types/database";
 
 export const metadata: Metadata = {
   title: "Sent Claims — Campus Lost & Found",
-  description: "Gönderdiğin claim'ler ve durumları.",
+  description: "The claims you sent and their status.",
 };
 
 export default async function SentClaimsPage() {
@@ -50,8 +50,8 @@ export default async function SentClaimsPage() {
         title="Sent Claims"
         description={
           claims.length > 0
-            ? `${claims.length} claim · ${pending} bekliyor · ${accepted} onaylandı`
-            : "Gönderdiğin claim'ler burada listelenir."
+            ? `${claims.length} claims · ${pending} pending · ${accepted} accepted`
+            : "The claims you send are listed here."
         }
         action={
           <ButtonLink href="/browse" variant="secondary">
@@ -61,12 +61,12 @@ export default async function SentClaimsPage() {
       />
 
       {error ? (
-        <FormError>Claim&apos;ler yüklenemedi: {error.message}</FormError>
+        <FormError>Couldn&apos;t load claims: {error.message}</FormError>
       ) : claims.length === 0 ? (
         <EmptyState
-          title="Henüz claim göndermedin"
-          description="Bulunan eşyalar arasında seninkini görürsen ilan sayfasından claim gönder."
-          action={<ButtonLink href="/browse">İlanlara göz at</ButtonLink>}
+          title="You haven't sent any claims yet"
+          description="If you spot your item among the found listings, send a claim from its page."
+          action={<ButtonLink href="/browse">Browse items</ButtonLink>}
         />
       ) : (
         <ul className="space-y-4">
@@ -99,7 +99,7 @@ function ClaimRow({ claim }: { claim: SentClaim }) {
             />
           ) : (
             <span className="flex h-full items-center justify-center text-xs text-neutral-400">
-              Görsel yok
+              No image
             </span>
           )}
         </Link>
@@ -128,7 +128,7 @@ function ClaimRow({ claim }: { claim: SentClaim }) {
 
           <p className="mt-3 line-clamp-3 text-sm text-neutral-600 dark:text-neutral-400">
             <span className="font-medium text-neutral-700 dark:text-neutral-300">
-              Mesajın:
+              Your message:
             </span>{" "}
             {claim.message}
           </p>
@@ -146,10 +146,10 @@ function StatusDetail({ claim }: { claim: SentClaim }) {
     return (
       <div className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm ring-1 ring-inset ring-emerald-200 dark:bg-emerald-950 dark:ring-emerald-900">
         <p className="font-medium text-emerald-900 dark:text-emerald-100">
-          Onaylandı — ilan sahibiyle iletişime geçebilirsin
+          Accepted — you can now contact the owner
         </p>
         <p className="mt-1 text-emerald-800 dark:text-emerald-200">
-          {claim.owner_name ?? "İsimsiz kullanıcı"}
+          {claim.owner_name ?? "Unnamed user"}
           {claim.owner_email && (
             <>
               {" · "}
@@ -169,15 +169,15 @@ function StatusDetail({ claim }: { claim: SentClaim }) {
   if (claim.status === "rejected") {
     return (
       <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-        İlan sahibi bu claim&apos;i reddetti.
+        The owner rejected this claim.
       </p>
     );
   }
 
   return (
     <p className="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-      İlan sahibinin yanıtı bekleniyor. Onaylanırsa iletişim bilgileri burada
-      görünecek.
+      Waiting for the owner to respond. If accepted, their contact details will
+      appear here.
     </p>
   );
 }

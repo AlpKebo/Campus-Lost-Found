@@ -14,9 +14,9 @@ export default function ItemNotFound() {
   return (
     <div className="py-16">
       <EmptyState
-        title="İlan bulunamadı"
-        description="Bu ilan silinmiş ya da adres yanlış olabilir. Listeden aramayı deneyebilirsin."
-        action={<ButtonLink href="/browse">Browse&apos;a dön</ButtonLink>}
+        title="Listing not found"
+        description="It may have been deleted, or the address is wrong. Try searching the list instead."
+        action={<ButtonLink href="/browse">Back to Browse</ButtonLink>}
       />
     </div>
   );

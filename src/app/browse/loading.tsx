@@ -15,7 +15,7 @@ import {
 export default function BrowseLoading() {
   return (
     <div className="py-10">
-      <LoadingRegion label="İlanlar yükleniyor">
+      <LoadingRegion label="Loading listings">
         <div className="mb-6">
           <Skeleton className="h-9 w-40" />
           <Skeleton className="mt-2 h-4 w-64" />

@@ -94,8 +94,8 @@ export function ListingActions({
     // sayfayı açtıktan sonra ilana claim gelmiş olabilir.
     if (count === 0) {
       setError(
-        "Bu ilan silinemedi — bu sırada bir claim gelmiş olabilir. " +
-          "Sayfayı yenileyip Close Listing kullan.",
+        "Couldn't delete this listing — a claim may have arrived in the meantime. " +
+          "Refresh the page and use Close Listing instead.",
       );
       setPending(null);
       router.refresh();
@@ -148,13 +148,13 @@ export function ListingActions({
 
         {hasActiveClaims ? (
           <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            Bu ilana claim geldiği için silinemez. Yayından kaldırmak için
-            Close Listing kullan.
+            This listing has claims, so it can&apos;t be deleted. Use Close
+            Listing to take it down.
           </p>
         ) : confirmingDelete ? (
           <>
             <span className="text-xs text-neutral-600 dark:text-neutral-300">
-              İlan kalıcı olarak silinsin mi?
+              Delete this listing permanently?
             </span>
             <Button
               variant="danger"
@@ -163,7 +163,7 @@ export function ListingActions({
               disabled={pending !== null}
             >
               {pending === "delete" && <Spinner />}
-              Evet, sil
+              Yes, delete
             </Button>
             <Button
               variant="ghost"
@@ -171,7 +171,7 @@ export function ListingActions({
               onClick={() => setConfirmingDelete(false)}
               disabled={pending !== null}
             >
-              Vazgeç
+              Cancel
             </Button>
           </>
         ) : (

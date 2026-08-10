@@ -84,31 +84,31 @@ function validate(
 
   const title = fields.title.trim();
   if (title.length < LIMITS.title.min) {
-    errors.title = `Başlık en az ${LIMITS.title.min} karakter olmalı.`;
+    errors.title = `Title must be at least ${LIMITS.title.min} characters.`;
   } else if (title.length > LIMITS.title.max) {
-    errors.title = `Başlık en fazla ${LIMITS.title.max} karakter olabilir.`;
+    errors.title = `Title can be at most ${LIMITS.title.max} characters.`;
   }
 
   const description = fields.description.trim();
   if (description.length < LIMITS.description.min) {
-    errors.description = `Açıklama en az ${LIMITS.description.min} karakter olmalı.`;
+    errors.description = `Description must be at least ${LIMITS.description.min} characters.`;
   } else if (description.length > LIMITS.description.max) {
-    errors.description = `Açıklama en fazla ${LIMITS.description.max} karakter olabilir.`;
+    errors.description = `Description can be at most ${LIMITS.description.max} characters.`;
   }
 
   if (!fields.category) {
-    errors.category = "Kategori seç.";
+    errors.category = "Pick a category.";
   }
 
   if (!fields.item_date) {
-    errors.item_date = "Tarih seç.";
+    errors.item_date = "Pick a date.";
   }
 
   const location = fields.location.trim();
   if (location.length < LIMITS.location.min) {
-    errors.location = `Konum en az ${LIMITS.location.min} karakter olmalı.`;
+    errors.location = `Location must be at least ${LIMITS.location.min} characters.`;
   } else if (location.length > LIMITS.location.max) {
-    errors.location = `Konum en fazla ${LIMITS.location.max} karakter olabilir.`;
+    errors.location = `Location can be at most ${LIMITS.location.max} characters.`;
   }
 
   if (image || imageRequired) {
@@ -230,7 +230,7 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
       setFormError(
         error instanceof Error
           ? error.message
-          : "İşlem tamamlanamadı, tekrar dene.",
+          : "Something went wrong. Please try again.",
       );
       setLoading(false);
     }
@@ -239,11 +239,11 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
   if (created) {
     return (
       <div className="space-y-4">
-        <FormSuccess>İlanın yayınlandı.</FormSuccess>
+        <FormSuccess>Your listing is live.</FormSuccess>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <ButtonLink href="/my-listings">My Listings&apos;e git</ButtonLink>
+          <ButtonLink href="/my-listings">Go to My Listings</ButtonLink>
           <Button type="button" variant="secondary" onClick={resetForm}>
-            Yeni ilan oluştur
+            Post another item
           </Button>
         </div>
       </div>
@@ -258,7 +258,7 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
 
       <fieldset disabled={loading} className="space-y-5">
         <div>
-          <Label>Ne bildiriyorsun?</Label>
+          <Label>What are you reporting?</Label>
           <div className="flex gap-2">
             {ITEM_TYPES.map((option) => (
               <label
@@ -281,10 +281,10 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
               </label>
             ))}
           </div>
-          <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1.5 text-sm text-ink-soft">
             {fields.type === "lost"
-              ? "Kaybettiğin bir eşyayı arıyorsun."
-              : "Bulduğun bir eşyanın sahibini arıyorsun."}
+              ? "You're looking for something you lost."
+              : "You're looking for the owner of something you found."}
           </p>
         </div>
 
@@ -295,7 +295,7 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
             value={fields.title}
             onChange={(event) => update("title", event.target.value)}
             maxLength={LIMITS.title.max}
-            placeholder="Siyah deri cüzdan"
+            placeholder="Black leather wallet"
             aria-invalid={errors.title ? true : undefined}
           />
           <FieldError>{errors.title}</FieldError>
@@ -308,7 +308,7 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
             value={fields.description}
             onChange={(event) => update("description", event.target.value)}
             maxLength={LIMITS.description.max}
-            placeholder="Eşyayı tanımlayan detaylar: renk, marka, üzerindeki ayırt edici işaretler…"
+            placeholder="Details that identify it: colour, brand, distinguishing marks…"
             aria-invalid={errors.description ? true : undefined}
           />
           <FieldError>{errors.description}</FieldError>
@@ -325,7 +325,7 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
               }
               aria-invalid={errors.category ? true : undefined}
             >
-              <option value="">Seç…</option>
+              <option value="">Select…</option>
               {CATEGORIES.map((category) => (
                 <option key={category.value} value={category.value}>
                   {category.label}
@@ -375,7 +375,7 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
                 className="size-18 rounded-lg object-cover"
               />
               <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Mevcut görsel. Değiştirmek istemiyorsan dosya seçme.
+                Current image. Leave the file input empty to keep it.
               </p>
             </div>
           )}
@@ -393,12 +393,12 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
                 image: file ? (validateImageFile(file) ?? undefined) : undefined,
               }));
             }}
-            className="file:mr-3 file:rounded-md file:border-0 file:bg-neutral-100 file:px-3 file:py-1.5 file:text-sm file:font-medium dark:file:bg-neutral-800 dark:file:text-neutral-100"
+            className="file:mr-3 file:rounded-full file:border-0 file:bg-white/10 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-ink"
             aria-invalid={errors.image ? true : undefined}
           />
-          <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
-            JPG, JPEG veya PNG · en fazla {maxImageMb} MB
-            {image && ` · seçilen: ${image.name}`}
+          <p className="mt-1.5 text-sm text-ink-soft">
+            JPG, JPEG or PNG · {maxImageMb} MB max
+            {image && ` · selected: ${image.name}`}
           </p>
           <FieldError>{errors.image}</FieldError>
         </div>
@@ -409,11 +409,11 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
           {loading && <Spinner />}
           {isEdit
             ? loading
-              ? "Kaydediliyor…"
-              : "Değişiklikleri kaydet"
+              ? "Saving…"
+              : "Save changes"
             : loading
-              ? "Yayınlanıyor…"
-              : "Listing'i yayınla"}
+              ? "Publishing…"
+              : "Publish listing"}
         </Button>
 
         {isEdit && (
@@ -422,7 +422,7 @@ export function ItemForm({ userId, maxDate, mode, item }: ItemFormProps) {
             variant="secondary"
             className="sm:flex-1"
           >
-            Vazgeç
+            Cancel
           </ButtonLink>
         )}
       </div>

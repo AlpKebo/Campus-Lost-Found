@@ -52,8 +52,8 @@ export default async function ProfileSetupPage(
   return (
     <div className="mx-auto max-w-md py-10">
       <PageHeader
-        title="Profilini tamamla"
-        description="Devam etmeden önce adını kaydet. İlanlarında ve gönderdiğin claim'lerde bu isim görünecek."
+        title="Complete your profile"
+        description="Add your name before you continue. This is the name shown on your listings and on the claims you send."
       />
 
       <Card className="p-6">

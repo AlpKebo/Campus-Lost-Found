@@ -18,10 +18,10 @@ export default function SentClaimsError({
     <RouteError
       error={error}
       retry={retry}
-      title="Claim'ler yüklenemedi"
-      description="Gönderdiğin claim'ler getirilirken beklenmedik bir hata oldu."
+      title="Couldn't load your claims"
+      description="Something unexpected went wrong loading the claims you sent."
       backHref="/browse"
-      backLabel="Browse'a dön"
+      backLabel="Back to Browse"
     />
   );
 }

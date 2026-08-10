@@ -43,7 +43,7 @@ export default async function EditListingPage(
     <div className="mx-auto max-w-2xl py-6">
       <PageHeader
         title="Edit Listing"
-        description="İlan bilgilerini güncelle. Durum değişiklikleri My Listings sayfasından yapılır."
+        description="Update your listing details. Status changes are made from My Listings."
       />
 
       <Card className="p-6">

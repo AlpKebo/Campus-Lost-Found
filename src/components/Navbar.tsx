@@ -24,13 +24,19 @@ export async function Navbar() {
   const profile = await getCurrentProfile();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/90 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-canvas/70 backdrop-blur-xl backdrop-saturate-150">
       <nav className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
-        <Link
-          href="/"
-          className="text-base font-semibold tracking-tight text-neutral-900 dark:text-neutral-50"
-        >
-          Campus Lost &amp; Found
+        <Link href="/" className="group flex items-center gap-2">
+          {/* Logo yerine geçen küçük marka öğesi. */}
+          <span
+            aria-hidden
+            className="grid size-7 place-items-center rounded-full bg-gradient-to-br from-glow to-magenta text-sm text-on-glow shadow-md transition-transform group-hover:-rotate-12"
+          >
+            ✦
+          </span>
+          <span className="font-display text-lg font-semibold tracking-tight text-ink">
+            Campus Lost &amp; Found
+          </span>
         </Link>
 
         <ul className="order-3 flex w-full items-center gap-1 overflow-x-auto text-sm sm:order-none sm:w-auto">
@@ -38,7 +44,7 @@ export async function Navbar() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="whitespace-nowrap rounded-md px-2.5 py-1.5 text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+                className="block whitespace-nowrap rounded-full px-3 py-1.5 font-medium text-ink-soft transition-colors hover:bg-white/10 hover:text-ink"
               >
                 {link.label}
               </Link>
@@ -50,12 +56,10 @@ export async function Navbar() {
           {profile ? (
             <>
               <span className="hidden text-right text-xs leading-tight sm:block">
-                <span className="block font-medium text-neutral-900 dark:text-neutral-100">
-                  {profile.name ?? "İsimsiz kullanıcı"}
+                <span className="block font-medium text-ink">
+                  {profile.name ?? "Unnamed user"}
                 </span>
-                <span className="block text-neutral-500 dark:text-neutral-400">
-                  {profile.email}
-                </span>
+                <span className="block text-ink-faint">{profile.email}</span>
               </span>
               <LogoutButton />
             </>

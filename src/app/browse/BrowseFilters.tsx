@@ -20,7 +20,7 @@ import {
  *
  * Form GET ile kendi sayfasına gönderir, yani filtreler URL'de birikir ve
  * JavaScript kapalıyken bile çalışır. Select'ler değişince form kendini
- * gönderir; arama kutusu Enter veya "Ara" butonu bekler.
+ * gönderir; arama kutusu Enter veya "Search" butonu bekler.
  */
 export function BrowseFilters({ filters }: { filters: BrowseFilterState }) {
   const formRef = useRef<HTMLFormElement>(null);
@@ -38,26 +38,26 @@ export function BrowseFilters({ filters }: { filters: BrowseFilterState }) {
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2 lg:col-span-1">
-          <Label htmlFor="q">Ara</Label>
+          <Label htmlFor="q">Search</Label>
           <Input
             id="q"
             name="q"
             type="search"
             defaultValue={filters.q}
-            placeholder="Başlık, açıklama veya konum"
+            placeholder="Title, description or location"
             maxLength={100}
           />
         </div>
 
         <div>
-          <Label htmlFor="type">Tür</Label>
+          <Label htmlFor="type">Type</Label>
           <Select
             id="type"
             name="type"
             defaultValue={filters.type}
             onChange={submitOnChange}
           >
-            <option value="">Hepsi</option>
+            <option value="">All</option>
             {ITEM_TYPES.map((t) => (
               <option key={t.value} value={t.value}>
                 {t.label}
@@ -67,14 +67,14 @@ export function BrowseFilters({ filters }: { filters: BrowseFilterState }) {
         </div>
 
         <div>
-          <Label htmlFor="category">Kategori</Label>
+          <Label htmlFor="category">Category</Label>
           <Select
             id="category"
             name="category"
             defaultValue={filters.category}
             onChange={submitOnChange}
           >
-            <option value="">Hepsi</option>
+            <option value="">All</option>
             {CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>
                 {c.label}
@@ -84,7 +84,7 @@ export function BrowseFilters({ filters }: { filters: BrowseFilterState }) {
         </div>
 
         <div>
-          <Label htmlFor="sort">Sırala</Label>
+          <Label htmlFor="sort">Sort by</Label>
           <Select
             id="sort"
             name="sort"
@@ -102,7 +102,7 @@ export function BrowseFilters({ filters }: { filters: BrowseFilterState }) {
 
       <div className="mt-4 flex items-center gap-3">
         <Button type="submit" size="sm">
-          Ara
+          Search
         </Button>
 
         {hasActiveFilters(filters) && (
@@ -110,7 +110,7 @@ export function BrowseFilters({ filters }: { filters: BrowseFilterState }) {
             href="/browse"
             className="text-sm text-neutral-500 underline-offset-4 hover:underline dark:text-neutral-400"
           >
-            Filtreleri temizle
+            Clear filters
           </Link>
         )}
       </div>

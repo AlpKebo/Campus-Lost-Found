@@ -24,7 +24,7 @@ import { parseFilters, sanitizeSearch, hasActiveFilters } from "./filters";
 
 export const metadata: Metadata = {
   title: "Browse — Campus Lost & Found",
-  description: "Kampüste kaybolan ve bulunan eşyaları ara.",
+  description: "Search lost and found items across campus.",
 };
 
 type PageProps = {
@@ -83,7 +83,7 @@ export default async function BrowsePage({ searchParams }: PageProps) {
     <div className="py-10">
       <PageHeader
         title="Browse"
-        description="Kampüste kaybolan ve bulunan eşyalar."
+        description="Lost and found items across campus."
         action={<ButtonLink href="/report">Report Item</ButtonLink>}
       />
 
@@ -91,24 +91,24 @@ export default async function BrowsePage({ searchParams }: PageProps) {
 
       {error ? (
         <FormError>
-          İlanlar yüklenemedi: {error.message}
+          Couldn&apos;t load listings: {error.message}
         </FormError>
       ) : items.length === 0 ? (
         <EmptyState
           title={
             hasActiveFilters(filters)
-              ? "Bu aramaya uyan ilan yok"
-              : "Henüz ilan yok"
+              ? "No listings match this search"
+              : "No listings yet"
           }
           description={
             hasActiveFilters(filters)
-              ? "Filtreleri gevşetip tekrar dene."
-              : "İlk ilanı sen ekleyebilirsin."
+              ? "Try loosening your filters."
+              : "Be the first to post one."
           }
           action={
             hasActiveFilters(filters) ? (
               <ButtonLink href="/browse" variant="secondary">
-                Filtreleri temizle
+                Clear filters
               </ButtonLink>
             ) : (
               <ButtonLink href="/report">Report Item</ButtonLink>

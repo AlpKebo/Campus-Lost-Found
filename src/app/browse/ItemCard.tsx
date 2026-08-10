@@ -28,7 +28,7 @@ export function ItemCard({ item }: { item: Item }) {
             />
           ) : (
             <div className="flex h-full items-center justify-center text-sm text-neutral-400">
-              Görsel yok
+              No image
             </div>
           )}
         </div>
@@ -52,11 +52,11 @@ export function ItemCard({ item }: { item: Item }) {
               <dt className="sr-only">Kategori</dt>
               <dd>{CATEGORY_LABELS[item.category]}</dd>
               <span aria-hidden="true">·</span>
-              <dt className="sr-only">Konum</dt>
+              <dt className="sr-only">Location</dt>
               <dd className="line-clamp-1">{item.location}</dd>
             </div>
             <div>
-              <dt className="sr-only">Tarih</dt>
+              <dt className="sr-only">Date</dt>
               <dd>{formatItemDate(item.item_date)}</dd>
             </div>
           </dl>
