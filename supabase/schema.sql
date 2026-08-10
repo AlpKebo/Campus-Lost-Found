@@ -33,6 +33,15 @@
 
 
 -- ---------------------------------------------------------------------
+-- 0. Çıktıyı sessizleştir
+-- ---------------------------------------------------------------------
+-- "drop ... if exists" ve "add column if not exists" ifadeleri her
+-- çalıştırmada onlarca NOTICE üretir. Bunlar hata değil, gürültü.
+-- Sadece gerçek uyarılar ve hatalar gösterilsin:
+set client_min_messages = warning;
+
+
+-- ---------------------------------------------------------------------
 -- 1. Uzantılar
 -- ---------------------------------------------------------------------
 -- pg_trgm, student2'nin title/description/location üzerinde yaptığı
@@ -361,6 +370,44 @@ create policy claims_update_item_owner on public.claims
     )
   );
 
+-- --- yabancı policy temizliği ----------------------------------------
+-- RLS'te policy'ler OR ile birleşir: tek bir gevşek policy bütün
+-- güvenliği deler. Bu yüzden bu üç tablodaki policy setinin sahibi
+-- yalnızca bu dosyadır — burada tanımlı OLMAYAN her policy silinir.
+--
+-- Etkisi: temiz bir Supabase projesinde hiçbir şey yapmaz. Tablolar
+-- başka bir projeden kalmışsa (ör. "profiles herkes tarafından
+-- okunabilir" gibi eski bir policy) onları temizler.
+do $$
+declare
+  pol record;
+  expected constant text[] := array[
+    'profiles:profiles_select_own',
+    'profiles:profiles_insert_own',
+    'profiles:profiles_update_own',
+    'items:items_select_public',
+    'items:items_insert_own',
+    'items:items_update_own',
+    'items:items_delete_own',
+    'claims:claims_select_own_or_owner',
+    'claims:claims_insert_own',
+    'claims:claims_update_item_owner'
+  ];
+begin
+  for pol in
+    select tablename, policyname
+    from pg_policies
+    where schemaname = 'public'
+      and tablename in ('profiles', 'items', 'claims')
+      and (tablename || ':' || policyname) <> all (expected)
+  loop
+    execute format('drop policy %I on public.%I', pol.policyname, pol.tablename);
+    -- warning seviyesi, çünkü NOTICE'lar bilerek susturuldu ve bunun
+    -- görülmesi gerekiyor: başka bir projeden kalma bir policy silindi.
+    raise warning 'Yabancı policy silindi: %.%', pol.tablename, pol.policyname;
+  end loop;
+end $$;
+
 
 -- ---------------------------------------------------------------------
 -- 7. Storage — item-images bucket
@@ -514,16 +561,26 @@ grant execute on function public.sent_claims()         to authenticated;
 -- ---------------------------------------------------------------------
 -- 9. Kurulum doğrulama
 -- ---------------------------------------------------------------------
--- Script sonunda bu sorgu çalışır. Üç satır ve rls_enabled = true
--- görüyorsan kurulum tamamdır.
+-- Script sonunda bu sorgu çalışır.
+-- Üç satırın da "sonuc" kolonunda OK yazıyorsa kurulum tamamdır.
+with beklenen(table_name, policy_count) as (
+  values ('profiles', 3), ('items', 4), ('claims', 3)
+)
 select
-  c.relname                as table_name,
-  c.relrowsecurity         as rls_enabled,
-  count(p.polname)         as policy_count
-from pg_class c
-join pg_namespace n on n.oid = c.relnamespace
+  b.table_name,
+  c.relrowsecurity                          as rls_enabled,
+  b.policy_count                            as beklenen_policy,
+  count(p.polname)                          as mevcut_policy,
+  case
+    when c.oid is null                      then 'HATA: tablo yok'
+    when not c.relrowsecurity               then 'HATA: RLS kapalı'
+    when count(p.polname) <> b.policy_count then 'HATA: policy sayısı tutmuyor'
+    else 'OK'
+  end                                       as sonuc
+from beklenen b
+left join pg_class c
+  on c.relname = b.table_name
+ and c.relnamespace = 'public'::regnamespace
 left join pg_policy p on p.polrelid = c.oid
-where n.nspname = 'public'
-  and c.relname in ('profiles', 'items', 'claims')
-group by c.relname, c.relrowsecurity
-order by c.relname;
+group by b.table_name, b.policy_count, c.oid, c.relrowsecurity
+order by b.table_name;
