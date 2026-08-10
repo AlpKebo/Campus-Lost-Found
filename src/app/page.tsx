@@ -1,5 +1,7 @@
+import { LogoutButton } from "@/components/LogoutButton";
 import { SetupNotice } from "@/components/SetupNotice";
 import { ButtonLink } from "@/components/ui/Button";
+import { getCurrentProfile } from "@/lib/supabase/server";
 
 /**
  * Landing Page.
@@ -8,7 +10,9 @@ import { ButtonLink } from "@/components/ui/Button";
  * bırakıldı; tasarımı ve içeriği student1 branch'inde geliştirilecek.
  * student2 bu dosyaya dokunmasın.
  */
-export default function HomePage() {
+export default async function HomePage() {
+  const profile = await getCurrentProfile();
+
   return (
     <div className="mx-auto max-w-2xl py-10 text-center sm:py-16">
       <SetupNotice />
@@ -27,6 +31,33 @@ export default function HomePage() {
         <ButtonLink href="/report" variant="secondary">
           Report Item
         </ButtonLink>
+      </div>
+
+      {/* Brief bölüm 1: login / logout alanı ana sayfada da görünür olmalı.
+          Navbar'daki kullanıcı bilgisi küçük ekranlarda gizleniyor. */}
+      <div className="mt-8 flex justify-center">
+        {profile ? (
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-neutral-200 px-5 py-4 sm:flex-row sm:gap-4 dark:border-neutral-800">
+            <span className="text-left text-sm leading-tight">
+              <span className="block font-medium text-neutral-900 dark:text-neutral-100">
+                {profile.name ?? "İsimsiz kullanıcı"}
+              </span>
+              <span className="block text-neutral-500 dark:text-neutral-400">
+                {profile.email}
+              </span>
+            </span>
+            {!profile.name && (
+              <ButtonLink href="/profile-setup" size="sm" variant="secondary">
+                Adını kaydet
+              </ButtonLink>
+            )}
+            <LogoutButton />
+          </div>
+        ) : (
+          <ButtonLink href="/login" variant="ghost" size="sm">
+            Zaten hesabın var mı? Login
+          </ButtonLink>
+        )}
       </div>
 
       <div className="mt-12 grid gap-4 text-left sm:grid-cols-3">
