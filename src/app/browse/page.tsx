@@ -7,6 +7,7 @@ import { SetupNotice } from "@/components/SetupNotice";
 import { BROWSABLE_STATUSES } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
+import { shelfCutoffDate } from "@/lib/student2-shelf";
 import type { Item } from "@/types/database";
 
 import { BrowseFilters } from "./BrowseFilters";
@@ -49,7 +50,12 @@ export default async function BrowsePage({ searchParams }: PageProps) {
     .select("*")
     .in("status", BROWSABLE_STATUSES);
 
-  if (filters.type) query = query.eq("type", filters.type);
+  // Community Shelf: 30+ gündür claim'lenmemiş "found" ilanlar.
+  if (filters.shelf) {
+    query = query.eq("type", "found").lte("item_date", shelfCutoffDate());
+  } else if (filters.type) {
+    query = query.eq("type", filters.type);
+  }
   if (filters.category) query = query.eq("category", filters.category);
 
   const search = sanitizeSearch(filters.q);

@@ -22,7 +22,9 @@ from (values
   ('Siyah gözlük kılıfı', '/seed-images/siyah-gozluk-kilifi.jpg'),
   ('Öğrenci kimlik kartı', '/seed-images/ogrenci-kimlik-karti.jpg'),
   ('Kütüphane giriş kartım', '/seed-images/kutuphane-giris-karti.jpg'),
-  ('Mavi kapaklı termos', '/seed-images/mavi-kapakli-termos.jpg')
+  ('Mavi kapaklı termos', '/seed-images/mavi-kapakli-termos.jpg'),
+  ('Sahipsiz laptop şarj aleti', '/seed-images/sahipsiz-laptop-sarj-aleti.jpg'),
+  ('Gri yün atkı', '/seed-images/gri-yun-atki.jpg')
 ) as v(title, image_url)
 where i.title = v.title
   and i.image_url is distinct from v.image_url;

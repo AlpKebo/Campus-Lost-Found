@@ -22,6 +22,7 @@ const ITEM_STATUS_STYLES: Record<ItemStatus, string> = {
   claimed: "bg-violet-400/15 text-violet-300 ring-violet-400/30",
   returned: "bg-emerald-400/15 text-emerald-300 ring-emerald-400/30",
   closed: "bg-slate-400/15 text-slate-300 ring-slate-400/30",
+  donated: "bg-amber-400/15 text-amber-300 ring-amber-400/30",
 };
 
 const CLAIM_STATUS_STYLES: Record<ClaimStatus, string> = {

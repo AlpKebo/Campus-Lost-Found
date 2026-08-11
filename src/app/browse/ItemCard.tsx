@@ -5,6 +5,7 @@ import { ItemStatusBadge, TypeBadge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Feedback";
 import { CATEGORY_LABELS } from "@/lib/constants";
 import { formatItemDate } from "@/lib/student2-format";
+import { isShelfEligible } from "@/lib/student2-shelf";
 import type { Item } from "@/types/database";
 
 /**
@@ -37,6 +38,11 @@ export function ItemCard({ item }: { item: Item }) {
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <TypeBadge type={item.type} />
             <ItemStatusBadge status={item.status} />
+            {isShelfEligible(item) && (
+              <span className="inline-flex items-center rounded-full bg-amber-400/15 px-2.5 py-0.5 text-xs font-semibold text-amber-300 ring-1 ring-inset ring-amber-400/30 backdrop-blur-sm">
+                Available to adopt
+              </span>
+            )}
           </div>
 
           <h2 className="line-clamp-1 font-medium text-neutral-900 dark:text-neutral-100">

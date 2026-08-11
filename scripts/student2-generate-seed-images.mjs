@@ -30,7 +30,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = path.join(ROOT, "public", "seed-images");
 const SQL_OUT = path.join(ROOT, "supabase", "student2_seed_images.sql");
 const PUBLIC_PREFIX = "/seed-images";
-const DEFAULT_MODEL = "fal-ai/flux/schnell";
+// flux/schnell 4 adımda üretir — hızlı ama detay ve doku zayıf kalıyordu.
+// flux/dev aynı fiyat aralığında çok daha net sonuç veriyor (28 adım).
+// .env.local içinde FAL_MODEL zaten tanımlıysa bu değer hiç kullanılmaz.
+const DEFAULT_MODEL = "fal-ai/flux/dev";
 
 /** .env.local (yoksa .env) içinden KEY=VALUE satırlarını okur. */
 async function loadEnvFile() {
@@ -71,9 +74,17 @@ async function generateImageUrl(model, prompt) {
     },
     body: JSON.stringify({
       prompt: `${prompt}, ${STYLE_SUFFIX}`,
-      image_size: "landscape_4_3", // kartlar aspect-4/3
+      // "landscape_4_3" preset'i 1024x768'de sabit — kartlar bunu 4:3 olarak
+      // kırpıyor ama yakından bakınca (item detay sayfası) yumuşak kalıyordu.
+      // Aynı oranda, daha yüksek çözünürlük için custom boyut veriyoruz.
+      image_size: { width: 1280, height: 960 },
       num_images: 1,
       output_format: "jpeg",
+      // schnell "distilled" bir model: 4 adım için eğitilmiş, endpoint 12'nin
+      // üstünü 422 ile reddediyor. dev ve üstü modeller 28+ adımda net sonuç
+      // verir. Model adına göre iki ayrı varsayılan kullanıyoruz.
+      num_inference_steps: model.includes("schnell") ? 8 : 32,
+      guidance_scale: 3.5,
     }),
   });
 

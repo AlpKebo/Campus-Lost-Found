@@ -31,14 +31,26 @@ export async function Navbar() {
           <Wordmark />
         </Link>
 
+        {/*
+          İnce dikey ayraç: marka ile gezinme linklerini ayrı gruplar olarak
+          okutuyor. Küçük ekranda linkler alta indiği için orada gizli.
+        */}
+        <span
+          aria-hidden
+          className="mx-1 hidden h-6 w-px bg-white/15 sm:block"
+        />
+
         <ul className="order-3 flex w-full items-center gap-1 overflow-x-auto text-sm sm:order-none sm:w-auto">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
-                // Tam kontrastlı ve kalın: koyu zeminde soluk gri linkler
-                // zor okunuyordu.
-                className="block whitespace-nowrap rounded-full px-3 py-1.5 text-[15px] font-semibold text-ink transition-colors hover:bg-white/12"
+                // İkincil ağırlık: marka adından daha soluk ve daha ince,
+                // hover'da tam kontrasta çıkıyor. Koyu zeminde okunaklı
+                // kalması için "soluk" hâlâ yüksek kontrastlı bir ton.
+                // py-2: dokunma hedefi mobilde 44px'e yaklaşsın (WCAG 2.5.8
+                // asgari 24px, Apple/Google önerisi 44px).
+                className="block rounded-full px-3 py-2 text-[15px] font-medium text-ink-soft transition-colors hover:bg-white/12 hover:text-ink"
               >
                 {link.label}
               </Link>

@@ -57,7 +57,13 @@ cross join (values
   ('lost',  'Kütüphane giriş kartım',  'Yemekhane ile kütüphane arasında bir yerde düşürdüm. Üzerinde numaram yazıyor.', 'id_cards',     'Merkez Yemekhane çevresi',     '2026-08-09', 'open'),
 
   -- other — eşi bilerek yok, "benzer ilan çıkmayan" durumu da test edilebilsin
-  ('found', 'Mavi kapaklı termos',     'Kütüphane 2. kat okuma salonunda masada unutulmuş halde buldum. Üzerinde çıkartma var.', 'other',        'Merkez Kütüphane 2. kat',      '2026-08-09', 'open')
+  ('found', 'Mavi kapaklı termos',     'Kütüphane 2. kat okuma salonunda masada unutulmuş halde buldum. Üzerinde çıkartma var.', 'other',        'Merkez Kütüphane 2. kat',      '2026-08-09', 'open'),
+
+  -- Community Shelf testi: item_date 30+ gün önce, tarih hesabı "bugün"e
+  -- göre kaydığı için sabit bir eski tarih yerine bilerek çok gerideler.
+  -- Boş veritabanında 30 gün beklemeden shelf filtresini görebilesin diye.
+  ('found', 'Sahipsiz laptop şarj aleti', 'Kütüphane kayıp eşya kutusunda haftalardır duruyor, kimse aramadı.', 'electronics', 'Merkez Kütüphane kayıp eşya kutusu', '2026-06-15', 'open'),
+  ('found', 'Gri yün atkı',               'Amfide sandalyenin arkasında unutulmuş, bahar başından beri kimse sormadı.', 'clothing',    'Fen Edebiyat B-110',                 '2026-06-01', 'open')
 ) as v(type, title, description, category, location, item_date, status)
 where p.email = 'BURAYA_KENDI_EPOSTAN@ornek.com'
   -- Tekrar çalıştırıldığında aynı ilanı ikinci kez eklemesin.

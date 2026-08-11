@@ -12,9 +12,11 @@ import { CATEGORY_LABELS } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatItemDate } from "@/lib/student2-format";
-import type { Claim, Item } from "@/types/database";
+import { isShelfEligible } from "@/lib/student2-shelf";
+import type { Claim, DonationRequest, Item } from "@/types/database";
 
 import { ClaimForm } from "./ClaimForm";
+import { DonationRequestForm } from "./DonationRequestForm";
 import { RelatedItems, RelatedItemsSkeleton } from "./RelatedItems";
 
 /**
@@ -88,7 +90,20 @@ export default async function ItemDetailPage({ params }: PageProps) {
     myClaim = data;
   }
 
+  // Kendi Community Shelf başvurunu görebilirsin (aynı desen).
+  let myDonationRequest: DonationRequest | null = null;
+  if (user) {
+    const { data } = await supabase
+      .from("donation_requests")
+      .select("*")
+      .eq("item_id", item.id)
+      .eq("requester_id", user.id)
+      .maybeSingle();
+    myDonationRequest = data;
+  }
+
   const isOwner = user?.id === item.owner_id;
+  const shelfEligible = isShelfEligible(item);
 
   return (
     <div className="py-10">
@@ -160,6 +175,17 @@ export default async function ItemDetailPage({ params }: PageProps) {
               myClaim={myClaim}
             />
           </div>
+
+          {(shelfEligible || myDonationRequest) && (
+            <div className="mt-4 rounded-xl border border-amber-400/30 bg-amber-400/5 p-5">
+              <DonationPanel
+                item={item}
+                isOwner={isOwner}
+                isLoggedIn={Boolean(user)}
+                myDonationRequest={myDonationRequest}
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -194,6 +220,14 @@ function ClaimPanel({
           My Listings
         </Link>{" "}
         page.
+      </Note>
+    );
+  }
+
+  if (item.status === "donated") {
+    return (
+      <Note title="This item has been given away">
+        Someone on campus already adopted it through the Community Shelf.
       </Note>
     );
   }
@@ -268,6 +302,94 @@ function ClaimPanel({
         Is this yours?
       </h2>
       <ClaimForm itemId={item.id} />
+    </div>
+  );
+}
+
+/**
+ * Community Shelf paneli — ClaimPanel'in yanında, yalnızca item bu bölüme
+ * uygunsa (isShelfEligible) veya kullanıcının zaten bir başvurusu varsa
+ * gösterilir (bkz. çağıran taraftaki koşul). item.status === "open" ve
+ * type === "found" garantisi isShelfEligible'da; burada tekrar kontrol
+ * edilmiyor.
+ */
+function DonationPanel({
+  item,
+  isOwner,
+  isLoggedIn,
+  myDonationRequest,
+}: {
+  item: Item;
+  isOwner: boolean;
+  isLoggedIn: boolean;
+  myDonationRequest: DonationRequest | null;
+}) {
+  if (isOwner) {
+    return (
+      <Note title="No one has claimed this in 30+ days">
+        It&apos;s now visible on the Community Shelf. See requests on your{" "}
+        <Link href="/community-shelf" className="underline underline-offset-4">
+          Community Shelf
+        </Link>{" "}
+        page.
+      </Note>
+    );
+  }
+
+  if (myDonationRequest) {
+    return (
+      <div>
+        <div className="mb-2 flex items-center gap-2">
+          <h2 className="font-medium text-neutral-900 dark:text-neutral-100">
+            You requested this item
+          </h2>
+          <ClaimStatusBadge status={myDonationRequest.status} />
+        </div>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          {myDonationRequest.status === "accepted"
+            ? "Accepted. The owner's contact details are on your Community Shelf page."
+            : myDonationRequest.status === "rejected"
+              ? "The owner chose someone else for this one."
+              : item.status !== "open"
+                ? "This item is no longer available — it was resolved another way."
+                : "Waiting for the owner to respond."}
+        </p>
+        <div className="mt-4">
+          <ButtonLink href="/community-shelf" variant="secondary" size="sm">
+            Community Shelf
+          </ButtonLink>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <div>
+        <h2 className="font-medium text-neutral-900 dark:text-neutral-100">
+          No one has claimed this in over 30 days
+        </h2>
+        <p className="mt-1 text-sm text-ink-soft">
+          You need to log in to request it for yourself.
+        </p>
+        <div className="mt-4">
+          <ButtonLink href={`/login?next=/items/${item.id}`} variant="secondary">
+            Log in
+          </ButtonLink>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h2 className="mb-1 font-medium text-neutral-900 dark:text-neutral-100">
+        No one has claimed this in over 30 days
+      </h2>
+      <p className="mb-3 text-sm text-ink-soft">
+        It&apos;s open on the Community Shelf — if you could use it, send a request.
+      </p>
+      <DonationRequestForm itemId={item.id} />
     </div>
   );
 }

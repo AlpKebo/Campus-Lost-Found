@@ -106,4 +106,16 @@ export const SEED_IMAGE_PROMPTS = [
     title: "Mavi kapaklı termos",
     prompt: "a stainless steel thermos bottle with a blue lid and a small sticker, on a library reading table",
   },
+  // Community Shelf testi için: bkz. student2_seed_dev.sql'deki 30+ gün
+  // önceki iki "found" ilan.
+  {
+    slug: "sahipsiz-laptop-sarj-aleti",
+    title: "Sahipsiz laptop şarj aleti",
+    prompt: "a white laptop power adapter with a coiled cable, sitting in a cardboard lost-and-found box",
+  },
+  {
+    slug: "gri-yun-atki",
+    title: "Gri yün atkı",
+    prompt: "a folded grey wool scarf draped over the back of a lecture hall chair",
+  },
 ];

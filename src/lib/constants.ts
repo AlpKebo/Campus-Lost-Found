@@ -36,6 +36,7 @@ export const ITEM_STATUS_LABELS: Record<ItemStatus, string> = {
   claimed: "Claimed",
   returned: "Returned",
   closed: "Closed",
+  donated: "Donated",
 };
 
 export const CLAIM_STATUS_LABELS: Record<ClaimStatus, string> = {
@@ -74,6 +75,6 @@ export const PROTECTED_ROUTES = [
   "/report",
   "/my-listings",
   "/sent-claims",
-  "/requests",
+  "/community-shelf",
   "/profile-setup",
 ];

@@ -7,7 +7,7 @@
 
 export type ItemType = "lost" | "found";
 
-export type ItemStatus = "open" | "claimed" | "returned" | "closed";
+export type ItemStatus = "open" | "claimed" | "returned" | "closed" | "donated";
 
 export type ClaimStatus = "pending" | "accepted" | "rejected";
 
@@ -55,6 +55,20 @@ export type Claim = {
   created_at: string;
 };
 
+/**
+ * Community Shelf — bkz. supabase/community_shelf.sql. 30 gün claim
+ * almayan "found" ilanlara gönderilen "bana lazım" başvurusu. claims'ten
+ * ayrı bir tablo, aynı claim_status enum'ını paylaşır.
+ */
+export type DonationRequest = {
+  id: string;
+  item_id: string;
+  requester_id: string;
+  message: string;
+  status: ClaimStatus;
+  created_at: string;
+};
+
 /** public.received_claims() dönüş satırı — student1 kullanır. */
 export type ReceivedClaim = {
   claim_id: string;
@@ -84,6 +98,43 @@ export type SentClaim = {
   owner_email: string | null;
 };
 
+/** public.received_donation_requests() dönüş satırı. */
+export type ReceivedDonationRequest = {
+  request_id: string;
+  item_id: string;
+  item_title: string;
+  item_image_url: string;
+  item_location: string;
+  requester_name: string | null;
+  /** Yalnızca request accepted ise dolu gelir. */
+  requester_email: string | null;
+  message: string;
+  status: ClaimStatus;
+  created_at: string;
+};
+
+/** public.sent_donation_requests() dönüş satırı. */
+export type SentDonationRequest = {
+  request_id: string;
+  item_id: string;
+  item_title: string;
+  item_image_url: string;
+  item_location: string;
+  /**
+   * request hâlâ "pending" ama item artık "open" değilse, item başka bir
+   * yoldan (claim ya da başka bir başvuru) çoktan alınmış demektir — UI
+   * bunu ayrı bir "artık uygun değil" notuyla gösterir.
+   */
+  item_status: ItemStatus;
+  message: string;
+  status: ClaimStatus;
+  created_at: string;
+  /** Yalnızca request accepted ise dolu gelir. */
+  owner_name: string | null;
+  /** Yalnızca request accepted ise dolu gelir. */
+  owner_email: string | null;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -107,6 +158,13 @@ export type Database = {
         Update: Partial<Pick<Claim, "status">>;
         Relationships: [];
       };
+      donation_requests: {
+        Row: DonationRequest;
+        Insert: Omit<DonationRequest, "id" | "status" | "created_at"> &
+          Partial<Pick<DonationRequest, "id" | "status">>;
+        Update: Partial<Pick<DonationRequest, "status">>;
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: {
@@ -121,6 +179,24 @@ export type Database = {
       item_has_active_claims: {
         Args: { p_item_id: string };
         Returns: boolean;
+      };
+      /** supabase/community_shelf.sql */
+      received_donation_requests: {
+        Args: { p_item_id?: string | null };
+        Returns: ReceivedDonationRequest[];
+      };
+      /** supabase/community_shelf.sql */
+      sent_donation_requests: {
+        Args: Record<string, never>;
+        Returns: SentDonationRequest[];
+      };
+      /**
+       * supabase/community_shelf.sql — başvuruyu kabul eder, item'ı donated
+       * yapar, diğer pending başvuruları reddeder — tek transaction'da.
+       */
+      accept_donation_request: {
+        Args: { p_request_id: string };
+        Returns: undefined;
       };
       /**
        * student1 branch'inde eklenir: supabase/student1_accept_claim.sql

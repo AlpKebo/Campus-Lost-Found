@@ -26,6 +26,8 @@ export type BrowseFilterState = {
   type: ItemType | "";
   category: ItemCategory | "";
   sort: SortValue;
+  /** Community Shelf: yalnızca 30+ gündür claim'lenmemiş "found" ilanlar. */
+  shelf: boolean;
 };
 
 /** searchParams'tan gelen ham değeri tek bir string'e indirger. */
@@ -59,6 +61,7 @@ export function parseFilters(
     sort: SORT_OPTIONS.some((s) => s.value === sort)
       ? (sort as SortValue)
       : DEFAULT_SORT,
+    shelf: first(params.shelf) === "1",
   };
 }
 
@@ -68,6 +71,7 @@ export function hasActiveFilters(filters: BrowseFilterState): boolean {
     filters.q !== "" ||
     filters.type !== "" ||
     filters.category !== "" ||
-    filters.sort !== DEFAULT_SORT
+    filters.sort !== DEFAULT_SORT ||
+    filters.shelf
   );
 }

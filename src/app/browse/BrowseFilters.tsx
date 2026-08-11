@@ -100,6 +100,18 @@ export function BrowseFilters({ filters }: { filters: BrowseFilterState }) {
         </div>
       </div>
 
+      <label className="mt-4 flex cursor-pointer items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+        <input
+          type="checkbox"
+          name="shelf"
+          value="1"
+          defaultChecked={filters.shelf}
+          onChange={submitOnChange}
+          className="size-4 rounded border-neutral-300 text-neutral-900 focus:ring-neutral-500 dark:border-neutral-700 dark:bg-neutral-800"
+        />
+        Available to adopt — found 30+ days ago, still unclaimed
+      </label>
+
       <div className="mt-4 flex items-center gap-3">
         <Button type="submit" size="sm">
           Search
