@@ -160,10 +160,23 @@ edildi. `main` iki tarafın işini de içeriyor.
 
 Canlı sürüm: **https://campus-lost-found-sand.vercel.app**
 
-Vercel projesi `main` branch'ine bağlı. Şu an **Deployment Protection açık** —
-adres yalnızca proje sahibinin Vercel hesabıyla açılıyor. Sunum/teslim için
-herkese açmak gerekirse Vercel → Project Settings → Deployment Protection'dan
-kapatılır.
+Adres **herkese açık**; Deployment Protection kapalı.
+
+Vercel projesi `main` branch'ine bağlı, yani `main`'e push otomatik deploy
+tetikler. **Bu bağlantı 2026-08-11'e kadar yoktu:** proje `vercel link` ile
+kurulmuştu ve deploy'lar elle atılıyordu, bu yüzden canlı sürüm bir ara 4
+commit geride kaldı. `vercel git connect` ile bağlandı.
+
+Deploy gelmiyorsa önce Vercel → Deployments'ta build var mı bak; hiç deneme
+yoksa bağlantı yine kopmuş olabilir. Elle atmak için repo kökünde:
+
+```bash
+vercel deploy --prod
+```
+
+> **Vercel Hobby planı takım üyesi kabul etmiyor.** İkinci kişinin logları
+> görmesi gerekiyorsa aynı repoyu kendi Vercel hesabına import edip kendi
+> ücretsiz deploy'unu alması gerekiyor.
 
 ### Vercel'de tanımlı ortam değişkenleri
 
