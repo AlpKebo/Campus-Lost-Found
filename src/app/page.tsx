@@ -49,16 +49,18 @@ export default async function HomePage() {
       {/*
         Üst şerit: solda kelime markası, sağda login. Menü yok — brief bölüm
         1'in "login landing'de de görünmeli" şartını sağdaki öğe karşılıyor.
-        absolute: akıştan çıkıyor ki içerik viewport'un tamamına göre
-        ortalansın, şeridin yüksekliği kadar aşağı kaymasın.
+
+        KONUMLANDIRMA: md'den itibaren `absolute` — akıştan çıkıyor ki hero
+        viewport'un tamamına göre konumlansın, şeridin yüksekliği kadar aşağı
+        kaymasın. Mobilde ise NORMAL AKIŞTA duruyor: telefonda içerik dikeyde
+        sıkıştığı için üstteki esnek boşluk sıfıra iniyor ve absolute şerit
+        başlığın üstüne biniyordu.
       */}
-      <div className="absolute inset-x-5 top-4 z-20 flex items-center justify-between sm:inset-x-8">
+      <header className="z-20 flex items-center justify-between gap-3 md:absolute md:inset-x-8 md:top-4">
         <Link href="/" aria-label="Campus Lost & Found" className="group">
           <Wordmark />
         </Link>
-      </div>
 
-      <header className="absolute top-4 right-5 z-20 sm:right-8">
         {profile ? (
           <div className="glass-base glass-clear flex items-center gap-3 rounded-full py-1.5 pr-1.5 pl-4">
             <span className="text-sm font-medium text-ink">
@@ -77,7 +79,7 @@ export default async function HomePage() {
         ) : (
           <Link
             href="/login"
-            className="glass-base glass-clear rounded-full px-5 py-2 text-sm font-bold text-ink"
+            className="glass-base glass-clear rounded-full px-5 py-2.5 text-sm font-bold text-ink"
           >
             Log in
           </Link>
@@ -87,19 +89,25 @@ export default async function HomePage() {
       <SetupNotice />
 
       {/*
-        Hero ve adım şeridi tek bir blok olarak dikeyde ortalanıyor.
-        Önceden main flex-1 idi ve boşluğun tamamı ikisinin ARASINA
-        düşüyordu; böylece adımlar yukarı geldi, artan boşluk alta kaldı.
+        Hero ve adım şeridi tek blok olarak konumlanıyor. Tam ortalama
+        (justify-center) yerine üstte 3, altta 2 birimlik esnek boşluk
+        kullanıyoruz: blok tam ortadan biraz aşağı iniyor, üstte logo/login
+        şeridinin altında nefes payı kalıyor, altta ise ince bir pay yeterli.
       */}
-      {/*
-        Hero ve adım şeridi tek blok olarak dikeyde ortalanıyor. Aradaki
-        boşluk bilerek geniş: adım şeridi ekranın alt yarısına insin,
-        altta yalnızca ince bir pay kalsın.
-      */}
-      <div className="flex flex-1 flex-col justify-center gap-16 pb-4 xl:gap-24">
-        <main className="mx-auto grid w-full max-w-6xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-4 xl:gap-8">
+      <div className="flex flex-1 flex-col pb-4">
+        {/* Esnek üst boşluk yalnızca md'den itibaren: mobilde header zaten
+            akışta yer kaplıyor, burada da boşluk olsa içerik alta itiliyordu. */}
+        <div aria-hidden className="hidden md:block md:flex-[3]" />
+
+        <div className="flex flex-col gap-16 xl:gap-24">
+          <main className="mx-auto grid w-full max-w-6xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-4 xl:gap-8">
           <div className="text-center md:text-left">
-            <h1 className="font-display text-5xl leading-[1.0] text-ink md:text-6xl xl:text-7xl">
+            {/*
+              md'de text-6xl "We find what" satırını sütun genişliğine
+              sığdırmıyor ve "We find" / "what" diye ikiye bölüyordu — bir
+              basamak küçültüldü, xl'de geniş sütunda yine büyüyor.
+            */}
+            <h1 className="font-display text-5xl leading-[1.0] text-ink md:text-5xl xl:text-7xl">
               We find what
               <br />
               you&apos;ve <span className="text-glow-gradient">lost</span>.
@@ -217,8 +225,11 @@ export default async function HomePage() {
               </p>
             </div>
           </li>
-        ))}
+          ))}
         </ol>
+        </div>
+
+        <div aria-hidden className="hidden md:block md:flex-[2]" />
       </div>
     </div>
   );

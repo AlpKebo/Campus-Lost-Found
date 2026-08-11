@@ -115,31 +115,27 @@ body::before {
  * LIQUID GLASS
  *
  * Katmanlar: (1) backdrop-filter arkadaki aurora'yı bulandırır, (2) yarı
- * saydam beyaz dolgu, (3) üst kenarda specular çizgi veren inset shadow.
+ * saydam dolgu, (3) üst kenarda specular çizgi veren inset shadow.
+ *
+ * NEDEN ::after PSEUDO-ELEMENT DEĞİL: önceki sürüm specular parıltıyı ayrı
+ * bir ::after katmanıyla veriyordu ve onu kırpmak için ana elemana
+ * `overflow: hidden` + `isolation: isolate` ekliyordu. Bu üçlü — pill
+ * (rounded-full) bir elemanda backdrop-filter + overflow:hidden + pseudo-
+ * element — iOS Safari'de bilinen bir kırpma hatasına giriyor: üst yarı
+ * dairesel köşeyi takip etmiyor, dikdörtgen bir "kapak" gibi taşıyor
+ * (mobilde Login butonunda görülen bozukluk buydu). Çözüm: parıltıyı ayrı
+ * bir katman yerine `background-image` gradyanının İÇİNE gömmek —
+ * background her zaman elemanın kendi border-radius'una göre boyanır, ek
+ * bir clip katmanına ihtiyaç duymaz.
  */
 @utility glass-base {
   position: relative;
-  overflow: hidden;
-  isolation: isolate;
   backdrop-filter: blur(18px) saturate(180%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   transition:
     translate 220ms ease,
     box-shadow 220ms ease,
     background-color 220ms ease;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0 0 55% 0;
-    z-index: -1;
-    background: linear-gradient(
-      180deg,
-      rgb(255 255 255 / 0.25),
-      rgb(255 255 255 / 0)
-    );
-    pointer-events: none;
-  }
 
   &:hover:not(:disabled) {
     translate: 0 -1px;
@@ -152,6 +148,11 @@ body::before {
 
 /* Renksiz cam — ikincil aksiyonlar, paneller, çipler. */
 @utility glass-clear {
+  background-image: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 0.22),
+    transparent 55%
+  );
   background-color: rgb(255 255 255 / 0.12);
   border: 1px solid rgb(255 255 255 / 0.24);
   box-shadow:
@@ -171,11 +172,9 @@ body::before {
 
 /* Siyan cam — birincil aksiyon. Metin koyu (--color-on-glow). */
 @utility glass-accent {
-  background-image: linear-gradient(
-    160deg,
-    rgb(34 211 238 / 0.95),
-    rgb(14 145 168 / 0.98)
-  );
+  background-image:
+    linear-gradient(180deg, rgb(255 255 255 / 0.3), transparent 55%),
+    linear-gradient(160deg, rgb(34 211 238 / 0.95), rgb(14 145 168 / 0.98));
   border: 1px solid rgb(190 245 255 / 0.5);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.55),
@@ -184,11 +183,9 @@ body::before {
     0 14px 32px -14px rgb(0 0 0 / 0.8);
 
   &:hover:not(:disabled) {
-    background-image: linear-gradient(
-      160deg,
-      rgb(70 224 247 / 1),
-      rgb(20 163 186 / 1)
-    );
+    background-image:
+      linear-gradient(180deg, rgb(255 255 255 / 0.4), transparent 55%),
+      linear-gradient(160deg, rgb(70 224 247 / 1), rgb(20 163 186 / 1));
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.7),
       inset 0 -10px 18px -12px rgb(225 252 255 / 0.7),
@@ -199,11 +196,9 @@ body::before {
 
 /* Mercan cam — yıkıcı aksiyon. */
 @utility glass-danger {
-  background-image: linear-gradient(
-    160deg,
-    rgb(251 113 133 / 0.92),
-    rgb(190 40 65 / 0.96)
-  );
+  background-image:
+    linear-gradient(180deg, rgb(255 255 255 / 0.26), transparent 55%),
+    linear-gradient(160deg, rgb(251 113 133 / 0.92), rgb(190 40 65 / 0.96));
   border: 1px solid rgb(255 190 200 / 0.45);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.45),
@@ -211,11 +206,9 @@ body::before {
     0 14px 32px -14px rgb(0 0 0 / 0.8);
 
   &:hover:not(:disabled) {
-    background-image: linear-gradient(
-      160deg,
-      rgb(253 138 155 / 0.96),
-      rgb(205 48 76 / 1)
-    );
+    background-image:
+      linear-gradient(180deg, rgb(255 255 255 / 0.36), transparent 55%),
+      linear-gradient(160deg, rgb(253 138 155 / 0.96), rgb(205 48 76 / 1));
   }
 }
 
