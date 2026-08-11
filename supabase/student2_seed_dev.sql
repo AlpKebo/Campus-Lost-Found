@@ -67,7 +67,12 @@ cross join (values
   ('found', 'Turuncu spor çantası',       'Spor salonu girişinde haftalardır sahipsiz duruyor. İçinde bir havlu ve su şişesi var.', 'bag',         'Spor Salonu girişi',                 '2026-06-10', 'open'),
   ('found', 'Güneş gözlüğü',              'Kütüphane bahçesindeki bir masada unutulmuş, aylardır kimse sormadı.', 'accessories',  'Merkez Kütüphane bahçesi',           '2026-05-20', 'open'),
   ('found', 'İngilizce roman',            'Yemekhanede bir masada bırakılmış, kapağı hafif yıpranmış. Sahibi çıkmadı.', 'books',        'Merkez Yemekhane',                   '2026-06-01', 'open'),
-  ('found', 'Siyah şemsiye',              'Fen Edebiyat girişindeki şemsiyelikte haftalardır duruyor, kimse almadı.', 'other',        'Fen Edebiyat Fakültesi girişi',      '2026-06-15', 'open')
+  ('found', 'Siyah şemsiye',              'Fen Edebiyat girişindeki şemsiyelikte haftalardır duruyor, kimse almadı.', 'other',        'Fen Edebiyat Fakültesi girişi',      '2026-06-15', 'open'),
+  ('found', 'Mavi yağmurluk',             'Koridordaki askıda aylardır asılı, kimse almadı. Bedeni orta.', 'clothing',     'Mühendislik B Blok koridoru',        '2026-05-10', 'open'),
+  ('found', 'Bej termos bardak',          'Kantin tezgahında unutulmuş, temizlenip kaldırıldı. Sahibi çıkmadı.', 'other',        'Mühendislik Fakültesi kantini',      '2026-05-25', 'open'),
+  ('found', 'Bilimsel hesap makinesi',    'Amfide sıranın üstünde kalmış. Sınav döneminden beri duruyor.', 'electronics',  'Mühendislik Amfi 2',                 '2026-05-05', 'open'),
+  ('found', 'Turkuaz spor havlusu',       'Soyunma odasındaki bankta katlanmış halde bırakılmış, yıkandı.', 'clothing',     'Spor Salonu soyunma odası',          '2026-06-05', 'open'),
+  ('found', 'Kumaş kulaklık kabı',        'Kütüphanede masada bulundu, içi boş. Uzun süredir sahibi aranıyor.', 'accessories',  'Merkez Kütüphane 1. kat',            '2026-05-18', 'open')
 ) as v(type, title, description, category, location, item_date, status)
 where p.email = 'BURAYA_KENDI_EPOSTAN@ornek.com'
   -- Tekrar çalıştırıldığında aynı ilanı ikinci kez eklemesin.

@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { ClaimStatusBadge, TypeBadge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { FormError } from "@/components/ui/Field";
 import { Card, EmptyState, PageHeader } from "@/components/ui/Feedback";
 import { SetupNotice } from "@/components/SetupNotice";
+import { SHELF_DAYS } from "@/lib/constants";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatTimestamp } from "@/lib/student2-format";
 import type { ReceivedDonationRequest, SentDonationRequest } from "@/types/database";
 
+import { AvailableItems, AvailableItemsSkeleton } from "./AvailableItems";
 import { IncomingRequests } from "./IncomingRequests";
 
 /**
@@ -62,6 +65,21 @@ export default async function CommunityShelfPage() {
           </ButtonLink>
         }
       />
+
+      {/* Keşif önce: başvurulabilecek ürünler en üstte. Ayrı sorgu, kendi
+          Suspense'i içinde akıyor; aşağıdaki iki RPC'yi bekletmiyor. */}
+      <section className="mb-10">
+        <h2 className="mb-1 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+          Available now — apply to adopt
+        </h2>
+        <p className="mb-4 text-sm text-neutral-500 dark:text-neutral-400">
+          Found items nobody claimed in {SHELF_DAYS}+ days. Open one and send a
+          request telling the finder why you need it.
+        </p>
+        <Suspense fallback={<AvailableItemsSkeleton />}>
+          <AvailableItems />
+        </Suspense>
+      </section>
 
       <section className="mb-10">
         <h2 className="mb-3 text-lg font-semibold text-neutral-900 dark:text-neutral-100">

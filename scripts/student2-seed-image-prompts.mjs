@@ -138,4 +138,31 @@ export const SEED_IMAGE_PROMPTS = [
     title: "Siyah şemsiye",
     prompt: "a black folding umbrella standing in a wall-mounted umbrella stand near a building entrance",
   },
+  // Community Shelf bölümü tek satır kartla boş görünmesin diye eklenenler.
+  // Hepsi 30+ gün öncesine tarihli "found" ilanlar — bkz. student2_seed_dev.sql.
+  {
+    slug: "mavi-yagmurluk",
+    title: "Mavi yağmurluk",
+    prompt: "a folded navy blue rain jacket hanging on a coat hook in a corridor",
+  },
+  {
+    slug: "termos-bardak",
+    title: "Bej termos bardak",
+    prompt: "a beige insulated travel coffee mug with the lid on, standing on a canteen counter",
+  },
+  {
+    slug: "hesap-makinesi",
+    title: "Bilimsel hesap makinesi",
+    prompt: "a grey scientific calculator with blank unlabelled keys lying on a lecture hall desk",
+  },
+  {
+    slug: "spor-havlusu",
+    title: "Turkuaz spor havlusu",
+    prompt: "a neatly folded turquoise microfibre gym towel on a locker room bench",
+  },
+  {
+    slug: "kulaklik-kabi",
+    title: "Kumaş kulaklık kabı",
+    prompt: "a small round grey fabric headphone case, zipped shut, on a library desk",
+  },
 ];
