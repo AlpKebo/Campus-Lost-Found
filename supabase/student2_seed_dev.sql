@@ -63,7 +63,11 @@ cross join (values
   -- göre kaydığı için sabit bir eski tarih yerine bilerek çok gerideler.
   -- Boş veritabanında 30 gün beklemeden shelf filtresini görebilesin diye.
   ('found', 'Sahipsiz laptop şarj aleti', 'Kütüphane kayıp eşya kutusunda haftalardır duruyor, kimse aramadı.', 'electronics', 'Merkez Kütüphane kayıp eşya kutusu', '2026-06-15', 'open'),
-  ('found', 'Gri yün atkı',               'Amfide sandalyenin arkasında unutulmuş, bahar başından beri kimse sormadı.', 'clothing',    'Fen Edebiyat B-110',                 '2026-06-01', 'open')
+  ('found', 'Gri yün atkı',               'Amfide sandalyenin arkasında unutulmuş, bahar başından beri kimse sormadı.', 'clothing',    'Fen Edebiyat B-110',                 '2026-06-01', 'open'),
+  ('found', 'Turuncu spor çantası',       'Spor salonu girişinde haftalardır sahipsiz duruyor. İçinde bir havlu ve su şişesi var.', 'bag',         'Spor Salonu girişi',                 '2026-06-10', 'open'),
+  ('found', 'Güneş gözlüğü',              'Kütüphane bahçesindeki bir masada unutulmuş, aylardır kimse sormadı.', 'accessories',  'Merkez Kütüphane bahçesi',           '2026-05-20', 'open'),
+  ('found', 'İngilizce roman',            'Yemekhanede bir masada bırakılmış, kapağı hafif yıpranmış. Sahibi çıkmadı.', 'books',        'Merkez Yemekhane',                   '2026-06-01', 'open'),
+  ('found', 'Siyah şemsiye',              'Fen Edebiyat girişindeki şemsiyelikte haftalardır duruyor, kimse almadı.', 'other',        'Fen Edebiyat Fakültesi girişi',      '2026-06-15', 'open')
 ) as v(type, title, description, category, location, item_date, status)
 where p.email = 'BURAYA_KENDI_EPOSTAN@ornek.com'
   -- Tekrar çalıştırıldığında aynı ilanı ikinci kez eklemesin.

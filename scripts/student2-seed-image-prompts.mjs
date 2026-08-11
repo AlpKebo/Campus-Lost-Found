@@ -118,4 +118,24 @@ export const SEED_IMAGE_PROMPTS = [
     title: "Gri yün atkı",
     prompt: "a folded grey wool scarf draped over the back of a lecture hall chair",
   },
+  {
+    slug: "turuncu-spor-cantasi",
+    title: "Turuncu spor çantası",
+    prompt: "an orange gym duffel bag sitting alone near a sports hall entrance, slightly dusty",
+  },
+  {
+    slug: "gunes-gozlugu",
+    title: "Güneş gözlüğü",
+    prompt: "a pair of dark sunglasses folded on a stone bench in a library courtyard",
+  },
+  {
+    slug: "ingilizce-roman",
+    title: "İngilizce roman",
+    prompt: "a worn paperback novel left on a cafeteria table, cover slightly curled",
+  },
+  {
+    slug: "siyah-semsiye",
+    title: "Siyah şemsiye",
+    prompt: "a black folding umbrella standing in a wall-mounted umbrella stand near a building entrance",
+  },
 ];
