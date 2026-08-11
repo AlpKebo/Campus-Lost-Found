@@ -27,8 +27,15 @@ export async function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-canvas/70 backdrop-blur-xl backdrop-saturate-150">
-      <nav className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
-        <Link href="/" className="group flex items-center">
+      {/*
+        lg:flex-nowrap — masaüstünde tek satır garantisi. Beşinci link
+        eklenince toplam genişlik konteyneri aşıyordu ve flex-wrap kullanıcı
+        bloğunu alt satıra düşürüyordu (Logout linklerle aynı hizada
+        kalmıyordu). Artık taşma olursa link listesi kendi içinde kayıyor,
+        satır bölünmüyor.
+      */}
+      <nav className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 lg:flex-nowrap">
+        <Link href="/" className="group flex shrink-0 items-center">
           <Wordmark />
         </Link>
 
@@ -38,10 +45,12 @@ export async function Navbar() {
         */}
         <span
           aria-hidden
-          className="mx-1 hidden h-6 w-px bg-white/15 sm:block"
+          className="mx-1 hidden h-6 w-px shrink-0 bg-white/15 sm:block"
         />
 
-        <ul className="order-3 flex w-full items-center gap-1 overflow-x-auto text-sm sm:order-none sm:w-auto">
+        {/* lg:min-w-0 — daralması gereken taraf bu liste olsun; overflow-x-auto
+            sayesinde sığmadığında kendi içinde kayar. */}
+        <ul className="order-3 flex w-full items-center gap-1 overflow-x-auto text-sm sm:order-none sm:w-auto lg:min-w-0">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
@@ -59,14 +68,16 @@ export async function Navbar() {
           ))}
         </ul>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           {profile ? (
             <>
-              <span className="hidden text-right text-xs leading-tight sm:block">
-                <span className="block font-medium text-ink">
-                  {profile.name ?? "Unnamed user"}
-                </span>
-                <span className="block text-ink-faint">{profile.email}</span>
+              {/*
+                Yalnızca isim: e-posta iki satırlık bloğu ~70px genişletiyor ve
+                toolbar'ın sığmamasının asıl sebebi oydu. Adres zaten profil
+                ve claim ekranlarında görünüyor, toolbar'da bilgi değeri düşük.
+              */}
+              <span className="hidden text-sm font-medium text-ink sm:block">
+                {profile.name ?? "Unnamed user"}
               </span>
               <LogoutButton />
             </>
