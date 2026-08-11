@@ -19,6 +19,7 @@ const NAV_LINKS = [
   { href: "/report", label: "Report Item" }, // student1
   { href: "/my-listings", label: "My Listings" }, // student1
   { href: "/sent-claims", label: "Sent Claims" }, // student2
+  { href: "/community-shelf", label: "Community Shelf" }, // student2
 ];
 
 export async function Navbar() {
